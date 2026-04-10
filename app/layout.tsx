@@ -1,1 +1,18 @@
-﻿import type { Metadata } from 'next'`nimport './globals.css'`nimport LayoutShell from '@/components/layout/LayoutShell'`n`nexport const metadata: Metadata = {`n  title: 'VEM Platform — B2B',`n  description: 'Plataforma de gestão de acompanhamentos VEM para instituições de saúde',`n}`n`nexport default function RootLayout({ children }: { children: React.ReactNode }) {`n  return (`n    <html lang="pt>`n <body>`n <LayoutShell>{children}</LayoutShell>`n </body>`n </html>`n )`n}
+﻿import type { Metadata } from 'next'
+import './globals.css'
+import LayoutShell from '@/components/layout/LayoutShell'
+
+export const metadata: Metadata = {
+  title: 'VEM Platform — B2B',
+  description: 'Plataforma de gestão de acompanhamentos VEM para instituições de saúde',
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="pt">
+      <body>
+        <LayoutShell>{children}</LayoutShell>
+      </body>
+    </html>
+  )
+}
