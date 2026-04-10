@@ -12,9 +12,15 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const { error } = await createClient().auth.signInWithPassword({ email, password })
-    if (error) setError('Email ou palavra-passe incorretos.')
-    else window.location.href = '/dashboard'
+    const supabase = createClient()
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    console.log('data:', data)
+    console.log('error:', error)
+    if (error) {
+      setError('Erro: ' + error.message)
+    } else {
+      window.location.href = '/dashboard'
+    }
     setLoading(false)
   }
 
@@ -22,55 +28,24 @@ export default function LoginPage() {
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F5F6F4' }}>
       <div style={{ width: 380, background: 'white', borderRadius: 16, border: '1px solid rgba(0,0,0,0.06)', padding: '40px 36px', boxShadow: '0 4px 24px rgba(0,0,0,0.04)' }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <p style={{ fontFamily: 'Fraunces, serif', fontSize: 32, color: '#0F6E56', fontWeight: 400, margin: '0 0 4px' }}>
-            VEM
-          </p>
+          <p style={{ fontFamily: 'Fraunces, serif', fontSize: 32, color: '#0F6E56', fontWeight: 400, margin: '0 0 4px' }}>VEM</p>
           <p style={{ fontSize: 13, color: '#9ca3af' }}>Plataforma B2B</p>
         </div>
-
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
             <label className="form-label">Email</label>
-            <input
-              type="email"
-              className="form-input"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="nome@instituicao.pt"
-              required
-            />
+            <input type="email" className="form-input" value={email} onChange={e => setEmail(e.target.value)} placeholder="nome@instituicao.pt" required />
           </div>
           <div>
             <label className="form-label">Palavra-passe</label>
-            <input
-              type="password"
-              className="form-input"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-            />
+            <input type="password" className="form-input" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required />
           </div>
-
-          {error && (
-            <p style={{ fontSize: 13, color: '#dc2626', background: '#FEE2E2', padding: '8px 12px', borderRadius: 8, margin: 0 }}>
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            className="btn-primary"
-            style={{ padding: '11px', fontSize: 14, marginTop: 4, opacity: loading ? 0.7 : 1 }}
-            disabled={loading}
-          >
+          {error && <p style={{ fontSize: 13, color: '#dc2626', background: '#FEE2E2', padding: '8px 12px', borderRadius: 8, margin: 0 }}>{error}</p>}
+          <button type="submit" className="btn-primary" style={{ padding: '11px', fontSize: 14, marginTop: 4, opacity: loading ? 0.7 : 1 }} disabled={loading}>
             {loading ? 'A entrar…' : 'Entrar'}
           </button>
         </form>
-
-        <p style={{ fontSize: 12, color: '#9ca3af', textAlign: 'center', marginTop: 24 }}>
-          vem.com.pt · Mobilidade com Dignidade
-        </p>
+        <p style={{ fontSize: 12, color: '#9ca3af', textAlign: 'center', marginTop: 24 }}>vem.com.pt · Mobilidade com Dignidade</p>
       </div>
     </div>
   )
