@@ -1,1 +1,17 @@
-'use client'\nimport { usePathname } from 'next/navigation'\nimport Sidebar from './Sidebar'\n\nexport default function LayoutShell({ children }: { children: React.ReactNode }) {\n  const path = usePathname()\n  const isLoginPage = path === '/login' || path === '/'\n  if (isLoginPage) return <>{children}</>\n  return (\n    <>\n      <Sidebar />\n      <main className="main-content">{children}</main>\n    </>\n  )\n}
+'use client'
+import { usePathname } from 'next/navigation'
+import Sidebar from './Sidebar'
+
+export default function LayoutShell({ children }: { children: React.ReactNode }) {
+  const path = usePathname()
+  const isLoginPage = path === '/login' || path === '/'
+
+  if (isLoginPage) return <>{children}</>
+
+  return (
+    <>
+      <Sidebar />
+      <main className="main-content">{children}</main>
+    </>
+  )
+}
