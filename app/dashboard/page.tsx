@@ -31,7 +31,7 @@ export default async function InstituicoesPage() {
       </div>
 
       {pendentes > 0 && (
-        <div style={{ background0: '#FAEEDA', border: '1px solid #FAC775', borderRadius: 10, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ background: '#FAEEDA', border: '1px solid #FAC775', borderRadius: 10, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{ fontSize: 13, color: '#633806' }}><strong>{pendentes}</strong> instituição(ões) aguardam aprovação</span>
         </div>
       )}
