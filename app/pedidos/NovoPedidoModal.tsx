@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
+import { criarPedido } from './actions'
 
 interface Props {
   utentes: { id: string; nome: string; condicao?: string }[]
@@ -18,7 +17,6 @@ const SERVICOS = [
 ]
 
 export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Props) {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState('')
 
@@ -48,30 +46,22 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
     }
 
     setLoading(true)
-    const supabase = createClient()
-    const data_servico = `${form.data_servico}T${form.hora_servico}:00`
-
-    const { error } = await supabase.from('pedidos').insert({
-      utente_id:      form.utente_id,
-      instituicao_id: form.instituicao_id,
-      tipo_servico:   form.tipo_servico,
-      data_servico,
-      origem:         form.origem || null,
-      destino:        form.destino || null,
-      urgente:        form.urgente,
-      notas:          form.notas || null,
-      estado:         'pendente',
-    })
-
-    setLoading(false)
-
-    if (error) {
-      setErro('Erro ao criar pedido: ' + error.message)
-      return
+    try {
+      await criarPedido({
+        utente_id:      form.utente_id,
+        instituicao_id: form.instituicao_id,
+        tipo_servico:   form.tipo_servico,
+        data_servico:   `${form.data_servico}T${form.hora_servico}:00`,
+        origem:         form.origem || undefined,
+        destino:        form.destino || undefined,
+        urgente:        form.urgente,
+        notas:          form.notas || undefined,
+      })
+      onClose()
+    } catch (err: any) {
+      setErro('Erro: ' + err.message)
     }
-
-    router.refresh()
-    onClose()
+    setLoading(false)
   }
 
   return (
@@ -97,10 +87,7 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
             </h2>
             <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>Preenche os dados do acompanhamento</p>
           </div>
-          <button
-            onClick={onClose}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#9ca3af', padding: 4, lineHeight: 1 }}
-          >✕</button>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#9ca3af', padding: 4, lineHeight: 1 }}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit} style={{ padding: '20px 28px 28px', display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -180,12 +167,8 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
           </div>
 
           <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
-            <input
-              type="checkbox"
-              checked={form.urgente}
-              onChange={e => set('urgente', e.target.checked)}
-              style={{ width: 16, height: 16, accentColor: '#dc2626', cursor: 'pointer' }}
-            />
+            <input type="checkbox" checked={form.urgente} onChange={e => set('urgente', e.target.checked)}
+              style={{ width: 16, height: 16, accentColor: '#dc2626', cursor: 'pointer' }} />
             <span style={{ fontSize: 13, color: '#374151' }}>Pedido urgente</span>
             {form.urgente && <span className="badge badge-urgente" style={{ marginLeft: 4 }}>Urgente</span>}
           </label>
