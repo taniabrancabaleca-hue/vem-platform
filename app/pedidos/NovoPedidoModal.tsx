@@ -68,18 +68,23 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
     <div
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
       style={{
-        position: 'fixed', inset: 0, zIndex: 50,
+        position: 'fixed',
+        top: 0, left: 0, right: 0, bottom: 0,
+        zIndex: 50,
         background: 'rgba(0,0,0,0.35)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: 24,
+        overflowY: 'auto',
+        padding: '40px 24px',
       }}
     >
       <div style={{
-        background: 'white', borderRadius: 16,
-        width: '100%', maxWidth: 540,
+        background: 'white',
+        borderRadius: 16,
+        width: '100%',
+        maxWidth: 540,
+        margin: '0 auto',
         boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
-        maxHeight: '90vh', overflowY: 'auto',
       }}>
+        {/* Header */}
         <div style={{ padding: '24px 28px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 22, fontWeight: 400, color: '#0F6E56', margin: 0 }}>
@@ -92,6 +97,7 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
 
         <form onSubmit={handleSubmit} style={{ padding: '20px 28px 28px', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
+          {/* Utente */}
           <div>
             <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
               Utente <span style={{ color: '#dc2626' }}>*</span>
@@ -104,6 +110,7 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
             </select>
           </div>
 
+          {/* Instituição */}
           <div>
             <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
               Instituição <span style={{ color: '#dc2626' }}>*</span>
@@ -116,6 +123,7 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
             </select>
           </div>
 
+          {/* Tipo de serviço */}
           <div>
             <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
               Tipo de serviço <span style={{ color: '#dc2626' }}>*</span>
@@ -128,6 +136,7 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
             </select>
           </div>
 
+          {/* Data + Hora */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <div>
               <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
@@ -141,6 +150,7 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
             </div>
           </div>
 
+          {/* Origem + Destino */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <div>
               <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>Origem</label>
@@ -152,20 +162,17 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
             </div>
           </div>
 
+          {/* Notas */}
           <div>
             <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
               Notas / informações adicionais
             </label>
-            <textarea
-              className="form-input"
-              rows={3}
-              placeholder="Instruções especiais, necessidades do utente…"
-              value={form.notas}
-              onChange={e => set('notas', e.target.value)}
-              style={{ resize: 'vertical', fontFamily: 'inherit' }}
-            />
+            <textarea className="form-input" rows={3} placeholder="Instruções especiais, necessidades do utente…"
+              value={form.notas} onChange={e => set('notas', e.target.value)}
+              style={{ resize: 'vertical', fontFamily: 'inherit' }} />
           </div>
 
+          {/* Urgente */}
           <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
             <input type="checkbox" checked={form.urgente} onChange={e => set('urgente', e.target.checked)}
               style={{ width: 16, height: 16, accentColor: '#dc2626', cursor: 'pointer' }} />
@@ -173,6 +180,7 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
             {form.urgente && <span className="badge badge-urgente" style={{ marginLeft: 4 }}>Urgente</span>}
           </label>
 
+          {/* Erro */}
           {erro && (
             <div style={{ background: '#FEE2E2', border: '1px solid #FECACA', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#991B1B' }}>
               {erro}
@@ -183,13 +191,4 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
 
           <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
             <button type="button" className="btn-secondary" onClick={onClose} disabled={loading}>Cancelar</button>
-            <button type="submit" className="btn-primary" style={{ minWidth: 120, opacity: loading ? 0.7 : 1 }} disabled={loading}>
-              {loading ? 'A criar…' : 'Criar pedido'}
-            </button>
-          </div>
-
-        </form>
-      </div>
-    </div>
-  )
-}
+            <button type="submit" className="btn-primary" style={{ minWidth: 120, opacity: loading ? 0.7 : 1 }} disabled={loading}></button>
