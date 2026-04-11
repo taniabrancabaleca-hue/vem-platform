@@ -70,20 +70,25 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
       style={{
         position: 'fixed',
         top: 0, left: 0, right: 0, bottom: 0,
-        zIndex: 50,
+        zIndex: 9999,
         background: 'rgba(0,0,0,0.35)',
         overflowY: 'auto',
-        padding: '40px 24px',
+        padding: '40px 24px 40px',
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
       }}
     >
-      <div style={{
-        background: 'white',
-        borderRadius: 16,
-        width: '100%',
-        maxWidth: 540,
-        margin: '0 auto',
-        boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
-      }}>
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: 'white',
+          borderRadius: 16,
+          width: '100%',
+          maxWidth: 540,
+          boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
+        }}
+      >
         {/* Header */}
         <div style={{ padding: '24px 28px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
@@ -191,4 +196,13 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
 
           <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
             <button type="button" className="btn-secondary" onClick={onClose} disabled={loading}>Cancelar</button>
-            <button type="submit" className="btn-primary" style={{ minWidth: 120, opacity: loading ? 0.7 : 1 }} disabled={loading}></button>
+            <button type="submit" className="btn-primary" style={{ minWidth: 120, opacity: loading ? 0.7 : 1 }} disabled={loading}>
+              {loading ? 'A criar…' : 'Criar pedido'}
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  )
+}
