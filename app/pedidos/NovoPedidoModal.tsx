@@ -57,31 +57,34 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
       style={{
         position: 'fixed',
-        top: 0, left: 0, right: 0, bottom: 0,
+        top: 0, left: '220px', right: 0, bottom: 0,
         zIndex: 9999,
         background: 'rgba(0,0,0,0.5)',
-        overflowY: 'auto',
-        paddingTop: 24,
-        paddingBottom: 24,
-        paddingLeft: 244,
-        paddingRight: 24,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px',
       }}
     >
       <div onClick={e => e.stopPropagation()} style={{
         background: 'white', borderRadius: 16,
         width: '100%', maxWidth: 520,
-        margin: '0 auto',
         boxShadow: '0 8px 40px rgba(0,0,0,0.15)',
+        display: 'flex', flexDirection: 'column',
+        maxHeight: 'calc(100vh - 32px)',
+        overflow: 'hidden',
       }}>
-        <div style={{ padding: '24px 28px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Header fixo */}
+        <div style={{ padding: '24px 28px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, borderBottom: '1px solid #f0f0ee' }}>
           <div>
             <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 22, fontWeight: 400, color: '#0F6E56', margin: 0 }}>Novo pedido</h2>
-            <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>Preenche os dados do acompanhamento</p>
+            <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4, marginBottom: 0 }}>Preenche os dados do acompanhamento</p>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#9ca3af', padding: 4 }}>✕</button>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ padding: '20px 28px 28px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {/* Body com scroll */}
+        <form onSubmit={handleSubmit} style={{ padding: '20px 28px 28px', display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto' }}>
 
           <div>
             <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
@@ -138,4 +141,32 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
           </div>
 
           <div>
-            <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display:
+            <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>Notas / informações adicionais</label>
+            <textarea className="form-input" rows={2} placeholder="Instruções especiais, necessidades do utente…"
+              value={form.notas} onChange={e => set('notas', e.target.value)}
+              style={{ resize: 'none', fontFamily: 'inherit' }} />
+          </div>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+            <input type="checkbox" checked={form.urgente} onChange={e => set('urgente', e.target.checked)}
+              style={{ width: 16, height: 16, accentColor: '#dc2626', cursor: 'pointer' }} />
+            <span style={{ fontSize: 13, color: '#374151' }}>Pedido urgente</span>
+            {form.urgente && <span className="badge badge-urgente" style={{ marginLeft: 4 }}>Urgente</span>}
+          </label>
+
+          {erro && (
+            <div style={{ background: '#FEE2E2', border: '1px solid #FECACA', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#991B1B' }}>{erro}</div>
+          )}
+
+          <div style={{ borderTop: '1px solid #f0f0ee', paddingTop: 16, display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+            <button type="button" className="btn-secondary" onClick={onClose} disabled={loading}>Cancelar</button>
+            <button type="submit" className="btn-primary" style={{ minWidth: 120, opacity: loading ? 0.7 : 1 }} disabled={loading}>
+              {loading ? 'A criar…' : 'Criar pedido'}
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  )
+}
