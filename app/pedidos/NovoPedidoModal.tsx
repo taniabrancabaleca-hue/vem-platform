@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { criarPedido } from './actions'
 
 interface Props {
@@ -19,11 +19,17 @@ const SERVICOS = [
 export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Props) {
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState('')
+  const [sidebarW, setSidebarW] = useState(220)
   const [form, setForm] = useState({
     utente_id: '', instituicao_id: '', tipo_servico: '',
     data_servico: '', hora_servico: '09:00',
     origem: '', destino: '', urgente: false, notas: '',
   })
+
+  useEffect(() => {
+    const sidebar = document.querySelector('aside')
+    if (sidebar) setSidebarW(sidebar.getBoundingClientRect().width)
+  }, [])
 
   function set(field: string, value: string | boolean) {
     setForm(f => ({ ...f, [field]: value }))
@@ -57,13 +63,14 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
       style={{
         position: 'fixed',
-        top: 0, left: '220px', right: 0, bottom: 0,
+        top: 0, bottom: 0,
+        left: sidebarW, right: 0,
         zIndex: 9999,
-        background: 'rgba(0,0,0,0.5)',
+        background: 'rgba(0,0,0,0.45)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '16px',
+        padding: 24,
       }}
     >
       <div onClick={e => e.stopPropagation()} style={{
@@ -71,102 +78,10 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
         width: '100%', maxWidth: 520,
         boxShadow: '0 8px 40px rgba(0,0,0,0.15)',
         display: 'flex', flexDirection: 'column',
-        maxHeight: 'calc(100vh - 32px)',
-        overflow: 'hidden',
+        maxHeight: 'calc(100vh - 48px)',
       }}>
-        {/* Header fixo */}
-        <div style={{ padding: '24px 28px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, borderBottom: '1px solid #f0f0ee' }}>
+        {/* Header */}
+        <div style={{ padding: '22px 28px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f0f0ee', flexShrink: 0 }}>
           <div>
             <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 22, fontWeight: 400, color: '#0F6E56', margin: 0 }}>Novo pedido</h2>
-            <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4, marginBottom: 0 }}>Preenche os dados do acompanhamento</p>
-          </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#9ca3af', padding: 4 }}>✕</button>
-        </div>
-
-        {/* Body com scroll */}
-        <form onSubmit={handleSubmit} style={{ padding: '20px 28px 28px', display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto' }}>
-
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
-              Utente <span style={{ color: '#dc2626' }}>*</span>
-            </label>
-            <select className="form-input" value={form.utente_id} onChange={e => set('utente_id', e.target.value)} required>
-              <option value="">Selecionar utente…</option>
-              {utentes.map(u => <option key={u.id} value={u.id}>{u.nome}{u.condicao ? ` — ${u.condicao}` : ''}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
-              Instituição <span style={{ color: '#dc2626' }}>*</span>
-            </label>
-            <select className="form-input" value={form.instituicao_id} onChange={e => set('instituicao_id', e.target.value)} required>
-              <option value="">Selecionar instituição…</option>
-              {instituicoes.map(i => <option key={i.id} value={i.id}>{i.nome}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
-              Tipo de serviço <span style={{ color: '#dc2626' }}>*</span>
-            </label>
-            <select className="form-input" value={form.tipo_servico} onChange={e => set('tipo_servico', e.target.value)} required>
-              <option value="">Selecionar serviço…</option>
-              {SERVICOS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-            </select>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <div>
-              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
-                Data <span style={{ color: '#dc2626' }}>*</span>
-              </label>
-              <input type="date" className="form-input" value={form.data_servico} onChange={e => set('data_servico', e.target.value)} required />
-            </div>
-            <div>
-              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>Hora</label>
-              <input type="time" className="form-input" value={form.hora_servico} onChange={e => set('hora_servico', e.target.value)} />
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <div>
-              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>Origem</label>
-              <input type="text" className="form-input" placeholder="Ex: Hospital de Santa Maria" value={form.origem} onChange={e => set('origem', e.target.value)} />
-            </div>
-            <div>
-              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>Destino</label>
-              <input type="text" className="form-input" placeholder="Ex: Residência do utente" value={form.destino} onChange={e => set('destino', e.target.value)} />
-            </div>
-          </div>
-
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>Notas / informações adicionais</label>
-            <textarea className="form-input" rows={2} placeholder="Instruções especiais, necessidades do utente…"
-              value={form.notas} onChange={e => set('notas', e.target.value)}
-              style={{ resize: 'none', fontFamily: 'inherit' }} />
-          </div>
-
-          <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
-            <input type="checkbox" checked={form.urgente} onChange={e => set('urgente', e.target.checked)}
-              style={{ width: 16, height: 16, accentColor: '#dc2626', cursor: 'pointer' }} />
-            <span style={{ fontSize: 13, color: '#374151' }}>Pedido urgente</span>
-            {form.urgente && <span className="badge badge-urgente" style={{ marginLeft: 4 }}>Urgente</span>}
-          </label>
-
-          {erro && (
-            <div style={{ background: '#FEE2E2', border: '1px solid #FECACA', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#991B1B' }}>{erro}</div>
-          )}
-
-          <div style={{ borderTop: '1px solid #f0f0ee', paddingTop: 16, display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
-            <button type="button" className="btn-secondary" onClick={onClose} disabled={loading}>Cancelar</button>
-            <button type="submit" className="btn-primary" style={{ minWidth: 120, opacity: loading ? 0.7 : 1 }} disabled={loading}>
-              {loading ? 'A criar…' : 'Criar pedido'}
-            </button>
-          </div>
-
-        </form>
-      </div>
-    </div>
-  )
-}
+            <p s
