@@ -58,3 +58,53 @@ export default async function PedidoDetailPage({ params }: { params: { id: strin
           <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#0F6E56', margin: '4px 0 0' }}>
             #{pedido.codigo}
           </h1>
+        </div>
+        <span style={{ fontSize: 12, fontWeight: 500, padding: '4px 12px', borderRadius: 20, background: '#f3f4f6', color: '#374151' }}>
+          {ESTADO_LABEL[pedido.estado] ?? pedido.estado}
+        </span>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 24 }}>
+        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20 }}>
+          <p style={{ fontSize: 11, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>Utente</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <Row label="Nome" value={pedido.utente?.nome ?? '—'} />
+            <Row label="Condição" value={pedido.utente?.condicao ?? '—'} />
+            {pedido.utente?.notas_clinicas && (
+              <Row label="Notas clínicas" value={pedido.utente.notas_clinicas} />
+            )}
+          </div>
+        </div>
+
+        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20 }}>
+          <p style={{ fontSize: 11, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>Pedido</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <Row label="Serviço" value={SERVICO_LABEL[pedido.servico] ?? pedido.servico} />
+            <Row label="Instituição" value={pedido.instituicao?.nome ?? '—'} />
+            <Row label="Data" value={pedido.data_pedido ? new Date(pedido.data_pedido).toLocaleDateString('pt-PT') : '—'} />
+            {pedido.notas && <Row label="Notas" value={pedido.notas} />}
+          </div>
+        </div>
+      </div>
+
+      {pedido.guia && (
+        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, marginBottom: 24 }}>
+          <p style={{ fontSize: 11, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>Guia atribuído</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <Row label="Nome" value={pedido.guia.nome} />
+            <Row label="Zona" value={pedido.guia.zona} />
+            <Row label="Telefone" value={pedido.guia.telefone ?? '—'} />
+            <Row label="Rating" value={pedido.guia.rating?.toString() ?? '—'} />
+          </div>
+        </div>
+      )}
+
+      {podeAtribuir && (
+        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20 }}>
+          <p style={{ fontSize: 11, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>Atribuir guia</p>
+          <AtribuirGuiaForm pedidoId={pedido.id} guias={guias ?? []} guiaAtualId={pedido.guia_id ?? undefined} />
+        </div>
+      )}
+    </div>
+  )
+}
