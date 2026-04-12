@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { criarPedido } from './actions'
 
 interface Props {
@@ -19,17 +19,11 @@ const SERVICOS = [
 export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Props) {
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState('')
-  const [sidebarW, setSidebarW] = useState(220)
   const [form, setForm] = useState({
     utente_id: '', instituicao_id: '', tipo_servico: '',
     data_servico: '', hora_servico: '09:00',
     origem: '', destino: '', urgente: false, notas: '',
   })
-
-  useEffect(() => {
-    const sidebar = document.querySelector('aside')
-    if (sidebar) setSidebarW(sidebar.getBoundingClientRect().width)
-  }, [])
 
   function set(field: string, value: string | boolean) {
     setForm(f => ({ ...f, [field]: value }))
@@ -59,29 +53,23 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
   }
 
   return (
-    <div
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}
-      style={{
+    <>
+      {/* Overlay escuro cobre tudo incluindo sidebar */}
+      <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 9998, background: 'rgba(0,0,0,0.45)' }} />
+
+      {/* Modal centrado na área de conteúdo */}
+      <div style={{
         position: 'fixed',
-        top: 0, bottom: 0,
-        left: sidebarW, right: 0,
+        top: '50%', left: '50%',
+        transform: 'translate(calc(-50% + 110px), -50%)',
         zIndex: 9999,
-        background: 'rgba(0,0,0,0.45)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 24,
-      }}
-    >
-      <div onClick={e => e.stopPropagation()} style={{
         background: 'white', borderRadius: 16,
-        width: '100%', maxWidth: 520,
-        boxShadow: '0 8px 40px rgba(0,0,0,0.15)',
+        width: 'calc(100vw - 280px)', maxWidth: 520,
+        boxShadow: '0 8px 40px rgba(0,0,0,0.2)',
+        maxHeight: '85vh',
         display: 'flex', flexDirection: 'column',
-        maxHeight: 'calc(100vh - 48px)',
       }}>
         {/* Header */}
         <div style={{ padding: '22px 28px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f0f0ee', flexShrink: 0 }}>
           <div>
-            <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 22, fontWeight: 400, color: '#0F6E56', margin: 0 }}>Novo pedido</h2>
-            <p s
+            <h2 style={{ fontFamily: 'Frau
