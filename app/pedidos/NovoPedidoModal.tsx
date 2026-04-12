@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { criarPedido } from './actions'
 
 interface Props {
@@ -24,6 +24,11 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
     data_servico: '', hora_servico: '09:00',
     origem: '', destino: '', urgente: false, notas: '',
   })
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
 
   function set(field: string, value: string | boolean) {
     setForm(f => ({ ...f, [field]: value }))
@@ -53,91 +58,71 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
   }
 
   return (
-    <div
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 9999,
-        background: 'rgba(0,0,0,0.45)',
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 9999,
+      background: 'rgba(0,0,0,0.45)',
+      overflowY: 'scroll',
+    }}>
+      <div style={{
+        minHeight: '100%',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'center',
+        padding: '40px 24px 40px 260px',
       }}
-    >
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          background: 'white',
-          borderRadius: 16,
-          width: 500,
-          boxShadow: '0 8px 40px rgba(0,0,0,0.2)',
-          display: 'flex',
-          flexDirection: 'column',
-          maxHeight: '85vh',
-          marginLeft: 220,
-        }}
+        onClick={e => { if (e.target === e.currentTarget) onClose() }}
       >
-        <div style={{ padding: '20px 24px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f0f0ee', flexShrink: 0 }}>
-          <div>
-            <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 20, fontWeight: 400, color: '#0F6E56', margin: 0 }}>Novo pedido</h2>
-            <p style={{ fontSize: 12, color: '#6b7280', marginTop: 2, marginBottom: 0 }}>Preenche os dados do acompanhamento</p>
-          </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: '#9ca3af' }}>✕</button>
-        </div>
-
-        <form onSubmit={handleSubmit} style={{ padding: '16px 24px 20px', display: 'flex', flexDirection: 'column', gap: 12, overflowY: 'auto' }}>
-
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Utente <span style={{ color: '#dc2626' }}>*</span></label>
-            <select className="form-input" value={form.utente_id} onChange={e => set('utente_id', e.target.value)} required>
-              <option value="">Selecionar utente…</option>
-              {utentes.map(u => <option key={u.id} value={u.id}>{u.nome}{u.condicao ? ` — ${u.condicao}` : ''}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Instituição <span style={{ color: '#dc2626' }}>*</span></label>
-            <select className="form-input" value={form.instituicao_id} onChange={e => set('instituicao_id', e.target.value)} required>
-              <option value="">Selecionar instituição…</option>
-              {instituicoes.map(i => <option key={i.id} value={i.id}>{i.nome}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Tipo de serviço <span style={{ color: '#dc2626' }}>*</span></label>
-            <select className="form-input" value={form.tipo_servico} onChange={e => set('tipo_servico', e.target.value)} required>
-              <option value="">Selecionar serviço…</option>
-              {SERVICOS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-            </select>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <div onClick={e => e.stopPropagation()} style={{
+          background: 'white', borderRadius: 16,
+          width: '100%', maxWidth: 500,
+          boxShadow: '0 8px 40px rgba(0,0,0,0.2)',
+        }}>
+          <div style={{ padding: '20px 24px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f0f0ee' }}>
             <div>
-              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Data <span style={{ color: '#dc2626' }}>*</span></label>
-              <input type="date" className="form-input" value={form.data_servico} onChange={e => set('data_servico', e.target.value)} required />
+              <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 20, fontWeight: 400, color: '#0F6E56', margin: 0 }}>Novo pedido</h2>
+              <p style={{ fontSize: 12, color: '#6b7280', marginTop: 2, marginBottom: 0 }}>Preenche os dados do acompanhamento</p>
             </div>
-            <div>
-              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Hora</label>
-              <input type="time" className="form-input" value={form.hora_servico} onChange={e => set('hora_servico', e.target.value)} />
-            </div>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: '#9ca3af' }}>✕</button>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <div>
-              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Origem</label>
-              <input type="text" className="form-input" placeholder="Ex: Hospital de Santa Maria" value={form.origem} onChange={e => set('origem', e.target.value)} />
-            </div>
-            <div>
-              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Destino</label>
-              <input type="text" className="form-input" placeholder="Ex: Residência do utente" value={form.destino} onChange={e => set('destino', e.target.value)} />
-            </div>
-          </div>
+          <form onSubmit={handleSubmit} style={{ padding: '16px 24px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
 
-          <div>
-            <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Notas</label>
-            <textarea className="form-input" rows={2} placeholder="Instruções especiais…" value={form.notas} onChange={e => set('notas', e.target.value)} style={{ resize: 'none', fontFamily: 'inherit' }} />
-          </div>
+            <div>
+              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Utente <span style={{ color: '#dc2626' }}>*</span></label>
+              <select className="form-input" value={form.utente_id} onChange={e => set('utente_id', e.target.value)} required>
+                <option value="">Selecionar utente…</option>
+                {utentes.map(u => <option key={u.id} value={u.id}>{u.nome}{u.condicao ? ` — ${u.condicao}` : ''}</option>)}
+              </select>
+            </div>
 
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, color: '#374151' }}>
-            <input type="checkbox" checked={form.urgente} onChange={e => set('urgente', e.target.checked)} style={{ widt
+            <div>
+              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Instituição <span style={{ color: '#dc2626' }}>*</span></label>
+              <select className="form-input" value={form.instituicao_id} onChange={e => set('instituicao_id', e.target.value)} required>
+                <option value="">Selecionar instituição…</option>
+                {instituicoes.map(i => <option key={i.id} value={i.id}>{i.nome}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Tipo de serviço <span style={{ color: '#dc2626' }}>*</span></label>
+              <select className="form-input" value={form.tipo_servico} onChange={e => set('tipo_servico', e.target.value)} required>
+                <option value="">Selecionar serviço…</option>
+                {SERVICOS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+              </select>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Data <span style={{ color: '#dc2626' }}>*</span></label>
+                <input type="date" className="form-input" value={form.data_servico} onChange={e => set('data_servico', e.target.value)} required />
+              </div>
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Hora</label>
+                <input type="time" className="form-input" value={form.hora_servico} onChange={e => set('hora_servico', e.target.value)} />
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 4 }}>Origem</label>
+                <input type="text" className="form-input" placeholder="Ex: Hospital de Santa Maria" value={fo
