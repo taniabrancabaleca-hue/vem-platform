@@ -106,4 +106,3 @@ export default function NovoPedidoModal({ utentes, instituicoes, onClose }: Prop
     </>
   )
 }
-ENDOFFILE
