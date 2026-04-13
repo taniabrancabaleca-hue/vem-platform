@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase'
-import { Building2, Hospital, Home } from 'lucide-react'
+import { Building2 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -64,7 +64,7 @@ export default async function InstituicoesPage() {
                   </td>
                   <td>
                     <div style={{ display: 'flex', gap: 6 }}>
-                      <button className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12 }}>Ver</button>
+                      <a href={`/instituicoes/${inst.id}`} className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12, textDecoration: 'none' }}>Ver</a>
                       {inst.estado === 'pendente' && <button className="btn-primary" style={{ padding: '4px 12px', fontSize: 12 }}>Aprovar</button>}
                     </div>
                   </td>
