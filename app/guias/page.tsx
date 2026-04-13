@@ -32,11 +32,11 @@ function GuiaInitials({ nome }: { nome: string }) {
 }
 
 const ZONA_COLORS: Record<string, { bg: string; color: string }> = {
-  Lisboa:   { bg: '#E6F1FB', color: '#0C447C' },
-  Porto:    { bg: '#EEEDFE', color: '#3C3489' },
-  Coimbra:  { bg: '#E1F5EE', color: '#085041' },
+  Lisboa:    { bg: '#E6F1FB', color: '#0C447C' },
+  Porto:     { bg: '#EEEDFE', color: '#3C3489' },
+  Coimbra:   { bg: '#E1F5EE', color: '#085041' },
   'Setúbal': { bg: '#FAEEDA', color: '#633806' },
-  Braga:    { bg: '#FAECE7', color: '#712B13' },
+  Braga:     { bg: '#FAECE7', color: '#712B13' },
 }
 
 function zonaColor(zona?: string) {
@@ -74,9 +74,9 @@ export default async function GuiasPage() {
             {disponiveis} disponíveis · {ocupados} ocupados · {inativos} inativos
           </p>
         </div>
-        <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <a href="/guias/novo" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
           + Adicionar guia
-        </button>
+        </a>
       </div>
 
       {/* KPI strip */}
@@ -118,8 +118,6 @@ export default async function GuiasPage() {
               const zc = zonaColor(g.zona ?? undefined)
               return (
                 <tr key={g.id}>
-
-                  {/* Nome + avatar */}
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <div style={{
@@ -133,32 +131,22 @@ export default async function GuiasPage() {
                       <span style={{ fontWeight: 500, color: '#111827', fontSize: 13 }}>{g.nome}</span>
                     </div>
                   </td>
-
-                  {/* Zona */}
                   <td>
                     {g.zona
                       ? <span style={{ fontSize: 12, background: zc.bg, color: zc.color, padding: '2px 10px', borderRadius: 20, fontWeight: 500 }}>{g.zona}</span>
                       : <span style={{ color: '#9ca3af', fontSize: 12 }}>—</span>
                     }
                   </td>
-
-                  {/* Contacto */}
                   <td style={{ fontSize: 12, color: '#6b7280' }}>
                     <div>{g.email}</div>
                     {g.telefone && <div style={{ marginTop: 2 }}>{g.telefone}</div>}
                   </td>
-
-                  {/* Rating */}
                   <td>
                     <StarRating rating={Number(g.rating)} />
                   </td>
-
-                  {/* Horas */}
                   <td style={{ fontSize: 13, color: '#374151' }}>
                     {g.total_horas ?? 0}h
                   </td>
-
-                  {/* Estado */}
                   <td>
                     <span className={`badge badge-${g.estado}`}>
                       {g.estado === 'disponivel' ? 'Disponível'
@@ -166,15 +154,12 @@ export default async function GuiasPage() {
                         : 'Inativo'}
                     </span>
                   </td>
-
-                  {/* Ações */}
                   <td>
                     <div style={{ display: 'flex', gap: 6 }}>
-                      <button className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12 }}>Ver</button>
+                      <a href={`/guias/${g.id}`} className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12, textDecoration: 'none' }}>Ver</a>
                       <button className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12 }}>Editar</button>
                     </div>
                   </td>
-
                 </tr>
               )
             }) : (
