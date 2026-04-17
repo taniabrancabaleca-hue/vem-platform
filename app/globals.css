@@ -207,6 +207,3 @@ body {
 }
 
 .vem-table tr:last-child td { border-bottom: none; }
-"@
-[System.IO.File]::WriteAllText("$PWD\app\globals.css", $css, [System.Text.Encoding]::UTF8)
-Write-Host "OK"
