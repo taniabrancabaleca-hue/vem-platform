@@ -37,6 +37,16 @@ export default function NovoPedidoForm({ utentes, instituicoes }: Props) {
       setErro('Preenche todos os campos obrigatórios.')
       return
     }
+    // Validação 24h — pedidos urgentes são excepção
+    if (!form.urgente) {
+      const dataServico = new Date(`${form.data_servico}T${form.hora_servico}:00`)
+      const agora = new Date()
+      const diffHoras = (dataServico.getTime() - agora.getTime()) / (1000 * 60 * 60)
+      if (diffHoras < 24) {
+        setErro('O pedido tem de ser feito com pelo menos 24 horas de antecedência. Para pedidos urgentes, assinala a opção "Pedido urgente".')
+        return
+      }
+    }
     setLoading(true)
     try {
       await criarPedido({
@@ -85,7 +95,18 @@ export default function NovoPedidoForm({ utentes, instituicoes }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
           <div>
             <label className="form-label">Data <span style={{ color: '#dc2626' }}>*</span></label>
-            <input type="date" className="form-input" value={form.data_servico} onChange={e => set('data_servico', e.target.value)} required />
+            <input
+              type="date"
+              className="form-input"
+              value={form.data_servico}
+              onChange={e => set('data_servico', e.target.value)}
+              min={(() => {
+                const min = new Date()
+                if (!form.urgente) min.setDate(min.getDate() + 1)
+                return min.toISOString().split('T')[0]
+              })()}
+              required
+            />
           </div>
           <div>
             <label className="form-label">Hora</label>
