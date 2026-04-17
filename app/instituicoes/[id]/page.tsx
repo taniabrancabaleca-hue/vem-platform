@@ -18,12 +18,7 @@ export default async function InstituicaoPerfilPage({ params }: { params: { id: 
 
   const [{ data: inst }, { data: pedidos }] = await Promise.all([
     supabase.from('instituicoes').select('*').eq('id', params.id).single(),
-    supabase
-      .from('pedidos')
-      .select('*, utente:utentes(nome), guia:guias(nome)')
-      .eq('instituicao_id', params.id)
-      .order('data_pedido', { ascending: false })
-      .limit(50),
+    supabase.from('pedidos').select('*, utente:utentes(nome), guia:guias(nome)').eq('instituicao_id', params.id).order('data_pedido', { ascending: false }).limit(50),
   ])
 
   if (!inst) notFound()
@@ -48,7 +43,7 @@ export default async function InstituicaoPerfilPage({ params }: { params: { id: 
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <div style={{ width: 48, height: 48, borderRadius: 12, background: tc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>🏥</div>
             <div>
-              <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#0F6E56', margin: 0 }}>{inst.nome}</h1>
+              <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#1B65B2', margin: 0 }}>{inst.nome}</h1>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                 <span style={{ fontSize: 12, background: tc.bg, color: tc.color, padding: '2px 10px', borderRadius: 20, fontWeight: 500 }}>{TIPO_LABEL[inst.tipo]}</span>
                 <span className={`badge badge-${inst.estado === 'ativa' ? 'concluido' : inst.estado === 'pendente' ? 'pendente' : 'cancelado'}`}>
@@ -59,7 +54,9 @@ export default async function InstituicaoPerfilPage({ params }: { params: { id: 
           </div>
           <RelatorioPDFButton instituicaoId={inst.id} instituicaoNome={inst.nome} pedidos={pedidosMes} />
         </div>
-      </div><div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
         {[
           { label: 'Total pedidos', value: pedidos?.length ?? 0 },
           { label: 'Concluídos', value: concluidos },
@@ -68,7 +65,7 @@ export default async function InstituicaoPerfilPage({ params }: { params: { id: 
         ].map(k => (
           <div key={k.label} className="kpi-card">
             <p style={{ fontSize: 11, fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 6px' }}>{k.label}</p>
-            <p style={{ fontSize: 28, fontWeight: 400, fontFamily: 'Fraunces, serif', color: '#0F6E56', margin: 0 }}>{k.value}</p>
+            <p style={{ fontSize: 28, fontWeight: 400, fontFamily: 'Fraunces, serif', color: '#1B65B2', margin: 0 }}>{k.value}</p>
           </div>
         ))}
       </div>
@@ -102,7 +99,7 @@ export default async function InstituicaoPerfilPage({ params }: { params: { id: 
               <tbody>
                 {pedidos.slice(0, 15).map((p: any) => (
                   <tr key={p.id}>
-                    <td><a href={`/pedidos/${p.id}`} style={{ fontSize: 13, color: '#0F6E56', textDecoration: 'none', fontWeight: 500 }}>#{p.codigo}</a></td>
+                    <td><a href={`/pedidos/${p.id}`} style={{ fontSize: 13, color: '#1B65B2', textDecoration: 'none', fontWeight: 500 }}>#{p.codigo}</a></td>
                     <td style={{ fontSize: 13, color: '#374151' }}>{p.utente?.nome ?? '—'}</td>
                     <td style={{ fontSize: 12, color: '#6b7280' }}>{p.guia?.nome ?? '—'}</td>
                     <td style={{ fontSize: 12, color: '#6b7280' }}>{p.data_pedido ? new Date(p.data_pedido).toLocaleDateString('pt-PT') : '—'}</td>
