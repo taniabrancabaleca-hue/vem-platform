@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase'
 import { Building2 } from 'lucide-react'
+import AprovarButton from './AprovarButton'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -22,16 +23,18 @@ export default async function InstituicoesPage() {
 
   return (
     <div className="fade-in">
-      <div className="flex items-center justify-between mb-8">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
         <div>
           <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#0F6E56', margin: 0 }}>Instituições</h1>
           <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{ativas} ativas · {pendentes} pendentes</p>
         </div>
-        <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>+ Adicionar</button>
+        <a href="/instituicoes/novo" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
+          + Adicionar
+        </a>
       </div>
 
       {pendentes > 0 && (
-        <div style={{ background: '#FAEEDA', border: '1px solid #FAC775', borderRadius: 10, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ background: '#FAEEDA', border: '1px solid #FAC775', borderRadius: 10, padding: '12px 16px', marginBottom: 20 }}>
           <span style={{ fontSize: 13, color: '#633806' }}><strong>{pendentes}</strong> instituição(ões) aguardam aprovação</span>
         </div>
       )}
@@ -65,7 +68,7 @@ export default async function InstituicoesPage() {
                   <td>
                     <div style={{ display: 'flex', gap: 6 }}>
                       <a href={`/instituicoes/${inst.id}`} className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12, textDecoration: 'none' }}>Ver</a>
-                      {inst.estado === 'pendente' && <button className="btn-primary" style={{ padding: '4px 12px', fontSize: 12 }}>Aprovar</button>}
+                      {inst.estado === 'pendente' && <AprovarButton id={inst.id} />}
                     </div>
                   </td>
                 </tr>
