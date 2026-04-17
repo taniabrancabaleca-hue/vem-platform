@@ -3,8 +3,8 @@ import './globals.css'
 import LayoutShell from '@/components/layout/LayoutShell'
 
 export const metadata: Metadata = {
-  title: 'VEM Platform — B2B',
-  description: 'Plataforma de gestão de acompanhamentos VEM para instituições de saúde',
+  title: 'VEM Platform - B2B',
+  description: 'Plataforma de gestao de acompanhamentos VEM para instituicoes de saude',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
