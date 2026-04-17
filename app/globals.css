@@ -1,12 +1,10 @@
+$css = @"
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --vem-green:    #1B65B2;
-  --vem-green-lt: #EBF2FA;
-  --vem-green-dk: #144D87;
   --sidebar-w: 220px;
 }
 
@@ -44,7 +42,7 @@ body {
 }
 
 .kpi-card:hover {
-  border-color: rgba(27, 101, 178, 0.2);
+  border-color: rgba(27,101,178,0.2);
   transform: translateY(-1px);
   transition: all 0.2s ease;
 }
@@ -67,9 +65,7 @@ body {
   text-decoration: none;
 }
 
-.btn-primary:hover {
-  background: #144D87;
-}
+.btn-primary:hover { background: #144D87; }
 
 .btn-secondary {
   background: white;
@@ -89,9 +85,7 @@ body {
   text-decoration: none;
 }
 
-.btn-secondary:hover {
-  background: #EBF2FA;
-}
+.btn-secondary:hover { background: #EBF2FA; }
 
 .form-label {
   display: block;
@@ -112,9 +106,7 @@ body {
   transition: border-color 0.15s;
 }
 
-.form-input:focus {
-  border-color: #1B65B2;
-}
+.form-input:focus { border-color: #1B65B2; }
 
 .badge {
   display: inline-flex;
@@ -157,9 +149,7 @@ body {
   margin-top: 24px;
 }
 
-.form-group {
-  margin-bottom: 16px;
-}
+.form-group { margin-bottom: 16px; }
 
 .form-group label {
   display: block;
@@ -187,29 +177,36 @@ body {
   border-color: #1B65B2;
 }
 
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
-
-.page-header h1 {
-  font-family: 'Fraunces', serif;
-  font-size: 28px;
-  font-weight: 400;
-  color: #1B65B2;
-  margin: 0 0 4px;
-}
-
-.page-header p {
-  font-size: 13px;
-  color: #6b7280;
-  margin: 0;
-}
-
 .data-card {
   background: white;
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,0.06);
   overflow: hidden;
+}
+
+.vem-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.vem-table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.vem-table td {
+  padding: 12px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid #f9fafb;
+}
+
+.vem-table tr:last-child td { border-bottom: none; }
+"@
+[System.IO.File]::WriteAllText("$PWD\app\globals.css", $css, [System.Text.Encoding]::UTF8)
+Write-Host "OK"
