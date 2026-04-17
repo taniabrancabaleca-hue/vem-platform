@@ -29,14 +29,7 @@ export default function LoginPage() {
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F5F6F4' }}>
       <div style={{ width: 380, background: 'white', borderRadius: 16, border: '1px solid rgba(0,0,0,0.06)', padding: '40px 36px', boxShadow: '0 4px 24px rgba(0,0,0,0.04)' }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <Image
-            src="/logo.png"
-            alt="VEM - Mobilidade com Dignidade"
-            width={160}
-            height={70}
-            priority
-            style={{ margin: '0 auto 8px' }}
-          />
+          <Image src="/logo.png" alt="VEM - Mobilidade com Dignidade" width={160} height={70} priority style={{ margin: '0 auto 8px' }} />
         </div>
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
@@ -45,7 +38,8 @@ export default function LoginPage() {
           </div>
           <div>
             <label className="form-label">Palavra-passe</label>
-            <input ty
-git add .
-git commit -m "Add logo to login page"
-git push origin main
+            <input type="password" className="form-input" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required />
+          </div>
+          {error && <p style={{ fontSize: 13, color: '#dc2626', background: '#FEE2E2', padding: '8px 12px', borderRadius: 8, margin: 0 }}>{error}</p>}
+          <button type="submit" className="btn-primary" style={{ padding: '11px', fontSize: 14, marginTop: 4, opacity: loading ? 0.7 : 1 }} disabled={loading}>
+            {loading ? 'A ent
