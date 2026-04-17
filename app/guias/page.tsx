@@ -32,11 +32,11 @@ function GuiaInitials({ nome }: { nome: string }) {
 }
 
 const ZONA_COLORS: Record<string, { bg: string; color: string }> = {
-  Lisboa:    { bg: '#E6F1FB', color: '#0C447C' },
-  Porto:     { bg: '#EEEDFE', color: '#3C3489' },
-  Coimbra:   { bg: '#E1F5EE', color: '#085041' },
+  Lisboa:   { bg: '#E6F1FB', color: '#0C447C' },
+  Porto:    { bg: '#EEEDFE', color: '#3C3489' },
+  Coimbra:  { bg: '#E1F5EE', color: '#085041' },
   'Setúbal': { bg: '#FAEEDA', color: '#633806' },
-  Braga:     { bg: '#FAECE7', color: '#712B13' },
+  Braga:    { bg: '#FAECE7', color: '#712B13' },
 }
 
 function zonaColor(zona?: string) {
@@ -64,7 +64,6 @@ export default async function GuiasPage() {
   return (
     <div className="fade-in">
 
-      {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
         <div>
           <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#0F6E56', margin: 0 }}>
@@ -79,7 +78,6 @@ export default async function GuiasPage() {
         </a>
       </div>
 
-      {/* KPI strip */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
         <div className="kpi-card">
           <p style={{ fontSize: 11, fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 6px' }}>Total de guias</p>
@@ -99,7 +97,6 @@ export default async function GuiasPage() {
         </div>
       </div>
 
-      {/* Tabela */}
       <div className="data-card">
         <table className="vem-table">
           <thead>
@@ -141,23 +138,17 @@ export default async function GuiasPage() {
                     <div>{g.email}</div>
                     {g.telefone && <div style={{ marginTop: 2 }}>{g.telefone}</div>}
                   </td>
-                  <td>
-                    <StarRating rating={Number(g.rating)} />
-                  </td>
-                  <td style={{ fontSize: 13, color: '#374151' }}>
-                    {g.total_horas ?? 0}h
-                  </td>
+                  <td><StarRating rating={Number(g.rating)} /></td>
+                  <td style={{ fontSize: 13, color: '#374151' }}>{g.total_horas ?? 0}h</td>
                   <td>
                     <span className={`badge badge-${g.estado}`}>
-                      {g.estado === 'disponivel' ? 'Disponível'
-                        : g.estado === 'ocupado' ? 'Ocupado'
-                        : 'Inativo'}
+                      {g.estado === 'disponivel' ? 'Disponível' : g.estado === 'ocupado' ? 'Ocupado' : 'Inativo'}
                     </span>
                   </td>
                   <td>
                     <div style={{ display: 'flex', gap: 6 }}>
                       <a href={`/guias/${g.id}`} className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12, textDecoration: 'none' }}>Ver</a>
-                      <button className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12 }}>Editar</button>
+                      <a href={`/guias/${g.id}/editar`} className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12, textDecoration: 'none' }}>Editar</a>
                     </div>
                   </td>
                 </tr>
