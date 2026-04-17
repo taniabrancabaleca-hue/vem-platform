@@ -1,7 +1,8 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, ClipboardList, Building2, UserCheck, Settings, LogOut } from 'lucide-react'
+import Image from 'next/image'
+import { LayoutDashboard, ClipboardList, UserCheck, Building2, Settings, LogOut } from 'lucide-react'
 import { logout } from '@/app/actions'
 
 const nav = [
@@ -15,9 +16,14 @@ export default function Sidebar() {
   const path = usePathname()
   return (
     <aside className="sidebar">
-      <div className="px-6 py-6 border-b border-white/10">
-        <p style={{ fontFamily: 'Fraunces, serif', fontSize: 22, color: 'white', fontWeight: 400 }}>VEM</p>
-        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginTop: 2 }}>Plataforma B2B</p>
+      <div className="px-6 py-5 border-b border-white/10">
+        <Image
+          src="/logo.png"
+          alt="VEM - Mobilidade com Dignidade"
+          width={120}
+          height={52}
+          priority
+        />
       </div>
       <nav className="flex-1 px-3 py-4 space-y-1">
         {nav.map(({ href, label, icon: Icon }) => {
