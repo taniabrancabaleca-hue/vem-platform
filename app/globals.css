@@ -19,7 +19,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Sidebar */
 .sidebar {
   width: var(--sidebar-w);
   min-height: 100vh;
@@ -37,7 +36,6 @@ body {
   padding: 28px 32px;
 }
 
-/* KPI cards */
 .kpi-card {
   background: white;
   border-radius: 12px;
@@ -49,7 +47,8 @@ body {
   border-color: rgba(27, 101, 178, 0.2);
   transform: translateY(-1px);
   transition: all 0.2s ease;
-}/* Buttons */
+}
+
 .btn-primary {
   background: #1B65B2;
   color: white;
@@ -83,7 +82,6 @@ body {
   background: #EBF2FA;
 }
 
-/* Forms */
 .form-label {
   display: block;
   font-size: 13px;
@@ -107,7 +105,6 @@ body {
   border-color: #1B65B2;
 }
 
-/* Badge */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -123,11 +120,58 @@ body {
 .badge-blue   { background: #EBF2FA; color: #1B65B2; }
 .badge-gray   { background: #f3f4f6; color: #6b7280; }
 
-/* Modal */
 .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.4);
   z-index: 50;
   display: flex;
-  align-items: cen
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #1B65B2;
+}
