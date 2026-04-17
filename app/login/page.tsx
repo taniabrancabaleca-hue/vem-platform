@@ -42,4 +42,11 @@ export default function LoginPage() {
           </div>
           {error && <p style={{ fontSize: 13, color: '#dc2626', background: '#FEE2E2', padding: '8px 12px', borderRadius: 8, margin: 0 }}>{error}</p>}
           <button type="submit" className="btn-primary" style={{ padding: '11px', fontSize: 14, marginTop: 4, opacity: loading ? 0.7 : 1 }} disabled={loading}>
-            {loading ? 'A ent
+            {loading ? 'A entrar…' : 'Entrar'}
+          </button>
+        </form>
+        <p style={{ fontSize: 12, color: '#9ca3af', textAlign: 'center', marginTop: 24 }}>vem.com.pt · Mobilidade com Dignidade</p>
+      </div>
+    </div>
+  )
+}
