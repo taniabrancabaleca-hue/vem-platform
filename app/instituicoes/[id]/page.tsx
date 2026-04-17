@@ -1,9 +1,8 @@
 import { createClient } from '@/lib/supabase'
-import { Building2 } from 'lucide-react'
-import AprovarButton from './AprovarButton'
+import { notFound } from 'next/navigation'
+import RelatorioPDFButton from './RelatorioPDFButton'
 
 export const dynamic = 'force-dynamic'
-export const revalidate = 0
 
 const TIPO_LABEL: Record<string, string> = {
   hospital: 'Hospital', clinica: 'Clínica', residencia: 'Residência'
@@ -14,69 +13,42 @@ const TIPO_COLORS: Record<string, { bg: string; color: string }> = {
   residencia: { bg: '#FAEEDA', color: '#633806' },
 }
 
-export default async function InstituicoesPage() {
+export default async function InstituicaoPerfilPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
-  const { data: instituicoes } = await supabase.from('instituicoes').select('*').order('created_at', { ascending: false })
 
-  const ativas = instituicoes?.filter(i => i.estado === 'ativa').length ?? 0
-  const pendentes = instituicoes?.filter(i => i.estado === 'pendente').length ?? 0
+  const [{ data: inst }, { data: pedidos }] = await Promise.all([
+    supabase.from('instituicoes').select('*').eq('id', params.id).single(),
+    supabase
+      .from('pedidos')
+      .select('*, utente:utentes(nome), guia:guias(nome)')
+      .eq('instituicao_id', params.id)
+      .order('data_pedido', { ascending: false })
+      .limit(50),
+  ])
+
+  if (!inst) notFound()
+
+  const tc = TIPO_COLORS[inst.tipo] ?? { bg: '#f3f4f6', color: '#6b7280' }
+  const concluidos = pedidos?.filter(p => p.estado === 'concluido').length ?? 0
+  const pendentes  = pedidos?.filter(p => p.estado === 'pendente').length ?? 0
+  const emCurso    = pedidos?.filter(p => ['atribuido', 'guia_a_caminho', 'em_curso'].includes(p.estado)).length ?? 0
+
+  const agora = new Date()
+  const pedidosMes = pedidos?.filter(p => {
+    if (!p.data_pedido) return false
+    const d = new Date(p.data_pedido)
+    return d.getMonth() === agora.getMonth() && d.getFullYear() === agora.getFullYear()
+  }) ?? []
 
   return (
     <div className="fade-in">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
-        <div>
-          <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#0F6E56', margin: 0 }}>Instituições</h1>
-          <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{ativas} ativas · {pendentes} pendentes</p>
-        </div>
-        <a href="/instituicoes/novo" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
-          + Adicionar
-        </a>
-      </div>
-
-      {pendentes > 0 && (
-        <div style={{ background: '#FAEEDA', border: '1px solid #FAC775', borderRadius: 10, padding: '12px 16px', marginBottom: 20 }}>
-          <span style={{ fontSize: 13, color: '#633806' }}><strong>{pendentes}</strong> instituição(ões) aguardam aprovação</span>
-        </div>
-      )}
-
-      <div className="data-card">
-        <table className="vem-table">
-          <thead>
-            <tr><th>Nome</th><th>Tipo</th><th>Cidade</th><th>Email</th><th>Estado</th><th>Ações</th></tr>
-          </thead>
-          <tbody>
-            {instituicoes?.map(inst => {
-              const tc = TIPO_COLORS[inst.tipo] ?? { bg: '#f3f4f6', color: '#6b7280' }
-              return (
-                <tr key={inst.id}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{ width: 32, height: 32, borderRadius: 8, background: tc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <Building2 size={14} color={tc.color} />
-                      </div>
-                      <span style={{ fontWeight: 500, color: '#111827' }}>{inst.nome}</span>
-                    </div>
-                  </td>
-                  <td><span style={{ fontSize: 12, background: tc.bg, color: tc.color, padding: '2px 10px', borderRadius: 20, fontWeight: 500 }}>{TIPO_LABEL[inst.tipo]}</span></td>
-                  <td style={{ fontSize: 13, color: '#6b7280' }}>{inst.cidade ?? '—'}</td>
-                  <td style={{ fontSize: 12, color: '#6b7280' }}>{inst.email}</td>
-                  <td>
-                    <span className={`badge badge-${inst.estado === 'ativa' ? 'concluido' : inst.estado === 'pendente' ? 'pendente' : 'cancelado'}`}>
-                      {inst.estado === 'ativa' ? 'Ativa' : inst.estado === 'pendente' ? 'Pendente' : 'Suspensa'}
-                    </span>
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', gap: 6 }}>
-                      <a href={`/instituicoes/${inst.id}`} className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12, textDecoration: 'none' }}>Ver</a>
-                      {inst.estado === 'pendente' && <AprovarButton id={inst.id} />}
-                    </div>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  )
-}
+      <div style={{ marginBottom: 32 }}>
+        <a href="/instituicoes" style={{ fontSize: 13, color: '#6b7280', textDecoration: 'none' }}>← Instituições</a>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: tc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>🏥</div>
+            <div>
+              <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#0F6E56', margin: 0 }}>{inst.nome}</h1>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
+                <span style={{ fontSize: 12, background: tc.bg, color: tc.color, padding: '2px 10px', borderRadius: 20, fontWeight: 500 }}>{TIPO_LABEL[inst.tipo]}</span>
+                <span className={`badge badge-${inst.estado === 'at
