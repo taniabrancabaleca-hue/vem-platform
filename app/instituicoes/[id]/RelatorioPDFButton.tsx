@@ -18,20 +18,20 @@ interface Props {
 }
 
 const SERVICO_LABEL: Record<string, string> = {
-  consulta_externa:     'Consulta externa',
-  transporte_consulta:  'Transporte consulta',
-  passeio:              'Passeio',
-  recolha_pos_alta:     'Recolha pós-alta',
+  consulta_externa: 'Consulta externa',
+  transporte_consulta: 'Transporte consulta',
+  passeio: 'Passeio',
+  recolha_pos_alta: 'Recolha pos-alta',
   acompanhamento_exame: 'Acomp. exame',
 }
 
 const ESTADO_LABEL: Record<string, string> = {
-  pendente:       'Pendente',
-  atribuido:      'Atribuído',
+  pendente: 'Pendente',
+  atribuido: 'Atribuido',
   guia_a_caminho: 'A caminho',
-  em_curso:       'Em curso',
-  concluido:      'Concluído',
-  cancelado:      'Cancelado',
+  em_curso: 'Em curso',
+  concluido: 'Concluido',
+  cancelado: 'Cancelado',
 }
 
 export default function RelatorioPDFButton({ instituicaoNome, pedidos }: Props) {
@@ -47,6 +47,8 @@ export default function RelatorioPDFButton({ instituicaoNome, pedidos }: Props) 
       const mes = new Date().toLocaleDateString('pt-PT', { month: 'long', year: 'numeric' })
       const agora = new Date().toLocaleDateString('pt-PT')
 
+      const AZUL: [number, number, number] = [27, 101, 178]
+
       doc.setFillColor(27, 101, 178)
       doc.rect(0, 0, 210, 32, 'F')
       doc.setTextColor(255, 255, 255)
@@ -56,12 +58,12 @@ export default function RelatorioPDFButton({ instituicaoNome, pedidos }: Props) 
       doc.setFontSize(10)
       doc.setFont('helvetica', 'normal')
       doc.text('Plataforma B2B de acompanhamento', 14, 20)
-      doc.text(`Gerado em ${agora}`, 14, 27)
+      doc.text('Gerado em ' + agora, 14, 27)
 
       doc.setTextColor(27, 101, 178)
       doc.setFontSize(16)
       doc.setFont('helvetica', 'bold')
-      doc.text(`Relatorio Mensal - ${mes}`, 14, 44)
+      doc.text('Relatorio Mensal - ' + mes, 14, 44)
       doc.setFontSize(12)
       doc.setFont('helvetica', 'normal')
       doc.setTextColor(107, 114, 128)
@@ -76,7 +78,7 @@ export default function RelatorioPDFButton({ instituicaoNome, pedidos }: Props) 
         { label: 'Total pedidos', value: String(pedidos.length) },
         { label: 'Concluidos', value: String(concluidos) },
         { label: 'Cancelados', value: String(cancelados) },
-        { label: 'Total horas', value: `${totalHoras}h` },
+        { label: 'Total horas', value: totalHoras + 'h' },
         { label: 'Guias usados', value: String(guiasUnicos) },
       ]
 
@@ -92,4 +94,17 @@ export default function RelatorioPDFButton({ instituicaoNome, pedidos }: Props) 
         doc.text(k.label.toUpperCase(), x + 3, 68)
         doc.setFontSize(14)
         doc.setFont('helvetica', 'bold')
-        doc.setTextColor(27, 101, 178)
+        doc.setTextColor(AZUL[0], AZUL[1], AZUL[2])
+        doc.text(k.value, x + 3, 76)
+        x += 39
+      })
+
+      doc.setFontSize(11)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(17, 24, 39)
+      doc.text('Pedidos do mes', 14, 92)
+
+      autoTable(doc, {
+        startY: 96,
+        head: [['Codigo', 'Servico', 'Utente', 'Guia', 'Data', 'Estado']],
+        body: pedi
