@@ -7,6 +7,12 @@ export async function criarPedido(input: any) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Nao autenticado')
+  // Validação 24h no servidor (segurança extra)
+  if (!input.urgente) {
+    const dataServico = new Date(input.data_servico)
+    const diffHoras = (dataServico.getTime() - Date.now()) / (1000 * 60 * 60)
+    if (diffHoras < 24) throw new Error('O pedido tem de ser feito com pelo menos 24 horas de antecedência.')
+  }
   const { count } = await supabase.from('pedidos').select('*', { count: 'exact', head: true })
   const codigo = 'PED-' + String((count ?? 0) + 1).padStart(4, '0')
   const [{ data: utente }, { data: instituicao }] = await Promise.all([
@@ -28,6 +34,7 @@ export async function criarPedido(input: any) {
   }
   revalidatePath('/pedidos')
 }
+
 export async function atualizarEstadoPedido(pedidoId: string, estado: string) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
