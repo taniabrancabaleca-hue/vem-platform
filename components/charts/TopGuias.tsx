@@ -12,7 +12,7 @@ export default function TopGuias() {
   const max = guias[0]?.total_acompanhamentos ?? 1
 
   const avatarColors = [
-    { bg: '#E1F5EE', color: '#085041' },
+    { bg: '#E1F5EE', color: '#144D87' },
     { bg: '#FAEEDA', color: '#633806' },
     { bg: '#EEEDFE', color: '#3C3489' },
     { bg: '#FBEAF0', color: '#72243E' },

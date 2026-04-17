@@ -40,7 +40,7 @@ export default async function PedidosRecentes() {
         {pedidos.map(p => (
           <tr key={p.id}>
             <td>
-              <span style={{ fontFamily: 'monospace', fontSize: 12, color: '#0F6E56', fontWeight: 500 }}>
+              <span style={{ fontFamily: 'monospace', fontSize: 12, color: '#1B65B2', fontWeight: 500 }}>
                 #{p.codigo}
               </span>
               {p.urgente && (

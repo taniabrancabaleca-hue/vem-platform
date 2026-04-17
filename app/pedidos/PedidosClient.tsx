@@ -31,7 +31,7 @@ export default function PedidosClient({ pedidos, utentes, instituicoes }: Props)
     <div className="fade-in">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
         <div>
-          <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#0F6E56', margin: 0 }}>Pedidos</h1>
+          <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#1B65B2', margin: 0 }}>Pedidos</h1>
           <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{pedidos.length} pedidos registados</p>
         </div>
         <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => router.push('/pedidos/novo')}>
@@ -51,7 +51,7 @@ export default function PedidosClient({ pedidos, utentes, instituicoes }: Props)
             {pedidos.length > 0 ? pedidos.map((p: any) => (
               <tr key={p.id}>
                 <td>
-                  <span style={{ fontFamily: 'monospace', fontSize: 12, color: '#0F6E56', fontWeight: 500 }}>#{p.codigo}</span>
+                  <span style={{ fontFamily: 'monospace', fontSize: 12, color: '#1B65B2', fontWeight: 500 }}>#{p.codigo}</span>
                   {p.urgente && <span className="badge badge-urgente" style={{ marginLeft: 6, fontSize: 10 }}>Urgente</span>}
                 </td>
                 <td style={{ fontWeight: 500, fontSize: 13 }}>{p.utente?.nome ?? '—'}</td>

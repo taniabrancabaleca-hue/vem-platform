@@ -11,7 +11,7 @@ export default async function KpiCards() {
       sub: `${stats.crescimento > 0 ? '+' : ''}${stats.crescimento}% vs mês ant.`,
       trend: stats.crescimento >= 0 ? 'up' : 'down',
       icon: TrendingUp,
-      accent: '#0F6E56',
+      accent: '#1B65B2',
     },
     {
       label: 'Horas de serviço',
@@ -62,7 +62,7 @@ export default async function KpiCards() {
           <p style={{ fontSize: 26, fontWeight: 600, color: '#111827', lineHeight: 1 }}>
             {c.value}
           </p>
-          <p style={{ fontSize: 11, color: c.trend === 'up' ? '#0F6E56' : c.trend === 'down' ? '#dc2626' : '#6b7280', marginTop: 6 }}>
+          <p style={{ fontSize: 11, color: c.trend === 'up' ? '#1B65B2' : c.trend === 'down' ? '#dc2626' : '#6b7280', marginTop: 6 }}>
             {c.sub}
           </p>
         </div>

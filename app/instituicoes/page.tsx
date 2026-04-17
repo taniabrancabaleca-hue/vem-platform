@@ -25,7 +25,7 @@ export default async function InstituicoesPage() {
     <div className="fade-in">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
         <div>
-          <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#0F6E56', margin: 0 }}>Instituições</h1>
+          <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#1B65B2', margin: 0 }}>Instituições</h1>
           <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{ativas} ativas · {pendentes} pendentes</p>
         </div>
         <a href="/instituicoes/novo" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>

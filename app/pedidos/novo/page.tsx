@@ -13,7 +13,7 @@ export default async function NovoPedidoPage() {
   return (
     <div className="fade-in">
       <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#0F6E56', margin: 0 }}>
+        <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#1B65B2', margin: 0 }}>
           Novo pedido
         </h1>
         <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>Preenche os dados do acompanhamento</p>

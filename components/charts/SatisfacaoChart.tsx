@@ -27,12 +27,12 @@ export default function SatisfacaoChart() {
     datasets: [{
       label: 'Satisfação',
       data: valores,
-      borderColor: '#0F6E56',
+      borderColor: '#1B65B2',
       backgroundColor: 'rgba(15, 110, 86, 0.07)',
       fill: true,
       tension: 0.4,
       pointRadius: 4,
-      pointBackgroundColor: '#0F6E56',
+      pointBackgroundColor: '#1B65B2',
       borderWidth: 2,
     }],
   }
@@ -60,7 +60,7 @@ export default function SatisfacaoChart() {
         <Line data={chartData} options={options} aria-label="Evolução da satisfação média VEM" />
       </div>
       <p style={{ textAlign: 'center', fontSize: 12, color: '#6b7280', marginTop: 10 }}>
-        Média: <strong style={{ color: '#0F6E56' }}>{media} ★</strong>
+        Média: <strong style={{ color: '#1B65B2' }}>{media} ★</strong>
       </p>
     </div>
   )

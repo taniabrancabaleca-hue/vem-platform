@@ -13,7 +13,7 @@ function StarRating({ rating }: { rating: number }) {
         <svg key={i} width="12" height="12" viewBox="0 0 12 12" fill="none">
           <polygon
             points="6,1 7.5,4.5 11,4.8 8.5,7 9.3,10.5 6,8.7 2.7,10.5 3.5,7 1,4.8 4.5,4.5"
-            fill={i <= full ? '#0F6E56' : i === full + 1 && frac >= 0.5 ? '#0F6E56' : '#e5e7eb'}
+            fill={i <= full ? '#1B65B2' : i === full + 1 && frac >= 0.5 ? '#1B65B2' : '#e5e7eb'}
             opacity={i === full + 1 && frac > 0 && frac < 0.5 ? 0.4 : 1}
           />
         </svg>
@@ -34,7 +34,7 @@ function GuiaInitials({ nome }: { nome: string }) {
 const ZONA_COLORS: Record<string, { bg: string; color: string }> = {
   Lisboa:   { bg: '#E6F1FB', color: '#0C447C' },
   Porto:    { bg: '#EEEDFE', color: '#3C3489' },
-  Coimbra:  { bg: '#E1F5EE', color: '#085041' },
+  Coimbra:  { bg: '#E1F5EE', color: '#144D87' },
   'Setúbal': { bg: '#FAEEDA', color: '#633806' },
   Braga:    { bg: '#FAECE7', color: '#712B13' },
 }
@@ -66,7 +66,7 @@ export default async function GuiasPage() {
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
         <div>
-          <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#0F6E56', margin: 0 }}>
+          <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#1B65B2', margin: 0 }}>
             Guias VEM
           </h1>
           <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>
@@ -81,15 +81,15 @@ export default async function GuiasPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
         <div className="kpi-card">
           <p style={{ fontSize: 11, fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 6px' }}>Total de guias</p>
-          <p style={{ fontSize: 28, fontWeight: 400, fontFamily: 'Fraunces, serif', color: '#0F6E56', margin: 0 }}>{guias?.length ?? 0}</p>
+          <p style={{ fontSize: 28, fontWeight: 400, fontFamily: 'Fraunces, serif', color: '#1B65B2', margin: 0 }}>{guias?.length ?? 0}</p>
         </div>
         <div className="kpi-card">
           <p style={{ fontSize: 11, fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 6px' }}>Disponíveis agora</p>
-          <p style={{ fontSize: 28, fontWeight: 400, fontFamily: 'Fraunces, serif', color: '#0F6E56', margin: 0 }}>{disponiveis}</p>
+          <p style={{ fontSize: 28, fontWeight: 400, fontFamily: 'Fraunces, serif', color: '#1B65B2', margin: 0 }}>{disponiveis}</p>
         </div>
         <div className="kpi-card">
           <p style={{ fontSize: 11, fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 6px' }}>Rating médio</p>
-          <p style={{ fontSize: 28, fontWeight: 400, fontFamily: 'Fraunces, serif', color: '#0F6E56', margin: 0 }}>
+          <p style={{ fontSize: 28, fontWeight: 400, fontFamily: 'Fraunces, serif', color: '#1B65B2', margin: 0 }}>
             {guias && guias.length > 0
               ? (guias.reduce((s, g) => s + Number(g.rating), 0) / guias.length).toFixed(1)
               : '—'}
@@ -119,7 +119,7 @@ export default async function GuiasPage() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <div style={{
                         width: 34, height: 34, borderRadius: '50%',
-                        background: '#E1F5EE', color: '#0F6E56',
+                        background: '#E1F5EE', color: '#1B65B2',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         fontSize: 12, fontWeight: 600, flexShrink: 0,
                       }}>
