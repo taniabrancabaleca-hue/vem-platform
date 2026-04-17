@@ -1,78 +1,86 @@
+
 import { createClient } from '@/lib/supabase'
-import { Building2, Hospital, Home } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-const TIPO_LABEL: Record<string, string> = {
-  hospital: 'Hospital', clinica: 'Clínica', residencia: 'Residência'
-}
-const TIPO_COLORS: Record<string, { bg: string; color: string }> = {
-  hospital:   { bg: '#E6F1FB', color: '#0C447C' },
-  clinica:    { bg: '#EEEDFE', color: '#3C3489' },
-  residencia: { bg: '#FAEEDA', color: '#633806' },
-}
-
-export default async function InstituicoesPage() {
+export default async function DashboardPage() {
   const supabase = createClient()
-  const { data: instituicoes } = await supabase.from('instituicoes').select('*').order('created_at', { ascending: false })
 
-  const ativas = instituicoes?.filter(i => i.estado === 'ativa').length ?? 0
-  const pendentes = instituicoes?.filter(i => i.estado === 'pendente').length ?? 0
+  const [
+    { data: pedidos },
+    { data: guias },
+    { data: instituicoes },
+    { data: utentes },
+  ] = await Promise.all([
+    supabase.from('pedidos').select('id, estado, created_at'),
+    supabase.from('guias').select('id, estado'),
+    supabase.from('instituicoes').select('id, estado'),
+    supabase.from('utentes').select('id'),
+  ])
+
+  const totalPedidos = pedidos?.length ?? 0
+  const pedidosPendentes = pedidos?.filter(p => p.estado === 'pendente').length ?? 0
+  const pedidosConcluidos = pedidos?.filter(p => p.estado === 'concluido').length ?? 0
+  const guiasDisponiveis = guias?.filter(g => g.estado === 'disponivel').length ?? 0
+  const totalGuias = guias?.length ?? 0
+  const totalInstituicoes = instituicoes?.filter(i => i.estado === 'ativa').length ?? 0
+  const totalUtentes = utentes?.length ?? 0
+
+  const kpis = [
+    { label: 'Total Pedidos', value: totalPedidos, sub: `${pedidosPendentes} pendentes` },
+    { label: 'Concluídos', value: pedidosConcluidos, sub: 'este mês' },
+    { label: 'Guias Disponíveis', value: guiasDisponiveis, sub: `de ${totalGuias} total` },
+    { label: 'Instituições Ativas', value: totalInstituicoes, sub: `${totalUtentes} utentes` },
+  ]
 
   return (
     <div className="fade-in">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#1B65B2', margin: 0 }}>Instituições</h1>
-          <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{ativas} ativas · {pendentes} pendentes</p>
-        </div>
-        <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>+ Adicionar</button>
+      <div style={{ marginBottom: 32 }}>
+        <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#1B65B2', margin: 0 }}>Dashboard</h1>
+        <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>Visão geral da plataforma VEM</p>
       </div>
 
-      {pendentes > 0 && (
-        <div style={{ background: '#FAEEDA', border: '1px solid #FAC775', borderRadius: 10, padding: '12px 16px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 13, color: '#633806' }}><strong>{pendentes}</strong> instituição(ões) aguardam aprovação</span>
-        </div>
-      )}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 32 }}>
+        {kpis.map(k => (
+          <div key={k.label} className="kpi-card">
+            <p style={{ fontSize: 11, fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 8px' }}>{k.label}</p>
+            <p style={{ fontSize: 32, fontWeight: 400, fontFamily: 'Fraunces, serif', color: '#1B65B2', margin: '0 0 4px' }}>{k.value}</p>
+            <p style={{ fontSize: 12, color: '#9ca3af', margin: 0 }}>{k.sub}</p>
+          </div>
+        ))}
+      </div>
 
-      <div className="data-card">
-        <table className="vem-table">
-          <thead>
-            <tr><th>Nome</th><th>Tipo</th><th>Cidade</th><th>Email</th><th>Estado</th><th>Ações</th></tr>
-          </thead>
-          <tbody>
-            {instituicoes?.map(inst => {
-              const tc = TIPO_COLORS[inst.tipo] ?? { bg: '#f3f4f6', color: '#6b7280' }
-              return (
-                <tr key={inst.id}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{ width: 32, height: 32, borderRadius: 8, background: tc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <Building2 size={14} color={tc.color} />
-                      </div>
-                      <span style={{ fontWeight: 500, color: '#111827' }}>{inst.nome}</span>
-                    </div>
-                  </td>
-                  <td><span style={{ fontSize: 12, background: tc.bg, color: tc.color, padding: '2px 10px', borderRadius: 20, fontWeight: 500 }}>{TIPO_LABEL[inst.tipo]}</span></td>
-                  <td style={{ fontSize: 13, color: '#6b7280' }}>{inst.cidade ?? '—'}</td>
-                  <td style={{ fontSize: 12, color: '#6b7280' }}>{inst.email}</td>
-                  <td>
-                    <span className={`badge badge-${inst.estado === 'ativa' ? 'concluido' : inst.estado === 'pendente' ? 'pendente' : 'cancelado'}`}>
-                      {inst.estado === 'ativa' ? 'Ativa' : inst.estado === 'pendente' ? 'Pendente' : 'Suspensa'}
-                    </span>
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', gap: 6 }}>
-                      <button className="btn-secondary" style={{ padding: '4px 12px', fontSize: 12 }}>Ver</button>
-                      {inst.estado === 'pendente' && <button className="btn-primary" style={{ padding: '4px 12px', fontSize: 12 }}>Aprovar</button>}
-                    </div>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+        <div style={{ background: 'white', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', padding: 24 }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 16 }}>Acesso rápido</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { href: '/pedidos/novo', label: '+ Novo pedido' },
+              { href: '/pedidos', label: 'Ver todos os pedidos' },
+              { href: '/guias', label: 'Gerir guias' },
+              { href: '/instituicoes', label: 'Ver instituições' },
+            ].map(item => (
+              <a key={item.href} href={item.href} style={{ fontSize: 13, color: '#1B65B2', textDecoration: 'none', padding: '8px 12px', borderRadius: 8, background: '#EBF2FA' }}>
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ background: 'white', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', padding: 24 }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 16 }}>Estado dos pedidos</p>
+          {[
+            { label: 'Pendentes', value: pedidosPendentes, color: '#854d0e', bg: '#fef9c3' },
+            { label: 'Concluídos', value: pedidosConcluidos, color: '#15803d', bg: '#dcfce7' },
+            { label: 'Total', value: totalPedidos, color: '#1B65B2', bg: '#EBF2FA' },
+          ].map(item => (
+            <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #f9fafb' }}>
+              <span style={{ fontSize: 13, color: '#374151' }}>{item.label}</span>
+              <span style={{ fontSize: 13, fontWeight: 600, background: item.bg, color: item.color, padding: '2px 10px', borderRadius: 20 }}>{item.value}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
