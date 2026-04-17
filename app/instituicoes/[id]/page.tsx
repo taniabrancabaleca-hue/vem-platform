@@ -24,7 +24,9 @@ export default async function InstituicaoPerfilPage({ params }: { params: { id: 
       .eq('instituicao_id', params.id)
       .order('data_pedido', { ascending: false })
       .limit(50),
-  ])if (!inst) notFound()
+  ])
+
+  if (!inst) notFound()
 
   const tc = TIPO_COLORS[inst.tipo] ?? { bg: '#f3f4f6', color: '#6b7280' }
   const concluidos = pedidos?.filter(p => p.estado === 'concluido').length ?? 0
