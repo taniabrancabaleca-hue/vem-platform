@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-server'
 import PedidosClient from './PedidosClient'
 
 export const dynamic = 'force-dynamic'
