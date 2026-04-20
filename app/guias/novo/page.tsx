@@ -1,5 +1,5 @@
 'use client'
-import { useState } from '@/lib/supabase'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 
@@ -53,23 +53,4 @@ export default function NovoGuiaPage() {
               <option value="Évora">Évora</option>
               <option value="Faro">Faro</option>
               <option value="Coimbra">Coimbra</option>
-              <option value="Braga">Braga</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label className="form-label">NIF</label>
-            <input className="form-input" name="nif" value={form.nif} onChange={handle} placeholder="123456789" />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Notas</label>
-            <textarea className="form-input" name="notas" value={form.notas} onChange={handle} rows={3} placeholder="Observações..." />
-          </div>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', marginTop: 8 }}>
-            <button type="button" className="btn-secondary" onClick={() => router.back()}>Cancelar</button>
-            <button type="submit" className="btn-primary" disabled={loading}>{loading ? 'A guardar...' : 'Guardar'}</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  )
-}
+              <option value="Braga">B
