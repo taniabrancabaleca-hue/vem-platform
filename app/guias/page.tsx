@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-server'
 import type { Guia } from '@/types/database'
 
 export const dynamic = 'force-dynamic'
