@@ -23,7 +23,7 @@ export default function NovoGuiaPage() {
   }
 
   return (
-    <div className="fade-in" style={{ maxWidth: 560 }}>
+   <div className="fade-in" style={{ maxWidth: 560 }}>
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#1B65B2', margin: 0 }}>Novo Guia</h1>
         <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>Adicionar um novo guia à plataforma</p>
