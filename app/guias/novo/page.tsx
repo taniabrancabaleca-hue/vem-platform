@@ -1,5 +1,5 @@
 'use client'
-import { useState } from '@/lib/supabase-server'
+import { useState } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 
