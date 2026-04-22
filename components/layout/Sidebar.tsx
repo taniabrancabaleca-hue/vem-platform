@@ -1,4 +1,3 @@
-
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -24,7 +23,7 @@ export default function Sidebar() {
           width={100}
           height={44}
           priority
-          style={{ objectFit: 'contain' }}
+          style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
         />
       </div>
       <nav style={{ flex: 1, padding: '12px 8px' }}>
