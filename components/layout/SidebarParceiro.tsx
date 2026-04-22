@@ -15,7 +15,14 @@ export default function SidebarParceiro() {
   return (
     <aside className="sidebar">
       <div style={{ padding: '20px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Image src="/logo.png" alt="VEM" width={100} height={44} priority style={{ objectFit: 'contain' }} />
+        <Image
+          src="/logo.png"
+          alt="VEM"
+          width={100}
+          height={44}
+          priority
+          style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
+        />
       </div>
       <div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>Portal Parceiro</p>
