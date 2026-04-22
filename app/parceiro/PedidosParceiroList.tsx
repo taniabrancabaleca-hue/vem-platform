@@ -13,6 +13,7 @@ type Pedido = {
   origem: string;
   destino: string;
   utente_nome_livre?: string;
+  urgente?: boolean;
 };
 
 const ESTADO_CONFIG: Record<string, { label: string; bg: string; color: string }> = {
@@ -47,7 +48,7 @@ export default function PedidosParceiroList() {
       if (!user) { setErro("Utilizador não autenticado."); setLoading(false); return; }
       const { data, error } = await supabase
         .from("pedidos")
-        .select("id, codigo, data_pedido, servico, estado, origem, destino, utente_nome_livre")
+        .select("id, codigo, data_pedido, servico, estado, origem, destino, utente_nome_livre, urgente")
         .eq("criado_por", user.id)
         .order("data_pedido", { ascending: false });
       if (error) setErro("Erro ao carregar pedidos: " + error.message);
@@ -109,12 +110,19 @@ export default function PedidosParceiroList() {
       {!loading && !erro && pedidos.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {pedidos.map((p) => (
-            <div key={p.id} style={{ background: "white", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+            <div key={p.id} style={{ background: "white", borderRadius: 12, border: `1px solid ${p.urgente ? "#fca5a5" : "rgba(0,0,0,0.06)"}`, padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
 
-              {/* Código + badge */}
+              {/* Código + badges */}
               <div style={{ minWidth: 100 }}>
                 <p style={{ fontSize: 13, fontWeight: 700, color: "#1B65B2", margin: "0 0 4px" }}>#{p.codigo}</p>
-                <EstadoBadge estado={p.estado} />
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  <EstadoBadge estado={p.estado} />
+                  {p.urgente && (
+                    <span style={{ fontSize: 11, fontWeight: 600, background: "#fee2e2", color: "#991b1b", padding: "3px 10px", borderRadius: 20 }}>
+                      Urgente
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Utente */}
