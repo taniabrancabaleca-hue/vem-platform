@@ -52,7 +52,7 @@ export default function PedidosClient({ pedidos }: Props) {
             {pedidos.length > 0 ? pedidos.map((p: any) => (
               <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => router.push(`/pedidos/${p.id}`)}>
                 <td><span style={{ fontFamily: 'monospace', fontSize: 12, color: '#1B65B2', fontWeight: 500 }}>#{p.codigo}</span></td>
-                <td style={{ fontWeight: 500, fontSize: 13 }}>{p.utente?.nome ?? '—'}</td>
+                <td style={{ fontWeight: 500, fontSize: 13 }}>{p.utente?.nome ?? p.utente_nome_livre ?? '—'}</td>
                 <td style={{ color: '#6b7280', fontSize: 13 }}>{p.instituicao?.nome ?? '—'}</td>
                 <td style={{ color: '#6b7280', fontSize: 13 }}>{SERVICO_LABEL[p.servico] ?? p.servico ?? '—'}</td>
                 <td style={{ color: '#6b7280', fontSize: 12 }}>
@@ -77,7 +77,7 @@ export default function PedidosClient({ pedidos }: Props) {
               <span style={{ fontFamily: 'monospace', fontSize: 13, color: '#1B65B2', fontWeight: 600 }}>#{p.codigo}</span>
               <span className={`badge badge-${p.estado}`}>{ESTADO_LABEL[p.estado] ?? p.estado}</span>
             </div>
-            <p style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 500, color: '#111827' }}>{p.utente?.nome ?? '—'}</p>
+            <p style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 500, color: '#111827' }}>{p.utente?.nome ?? p.utente_nome_livre ?? '—'}</p>
             <p style={{ margin: '0 0 4px', fontSize: 12, color: '#6b7280' }}>{p.instituicao?.nome ?? '—'}</p>
             <p style={{ margin: 0, fontSize: 12, color: '#9ca3af' }}>
               {SERVICO_LABEL[p.servico] ?? p.servico ?? '—'}
