@@ -1,3 +1,4 @@
+
 import { createClient } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
 
@@ -26,13 +27,14 @@ export default async function ParceiroPage() {
     .order('created_at', { ascending: false })
     .limit(20)
 
-  const { data: pack } = await supabase
+  const { data: packs } = await supabase
     .from('packs_horas')
     .select('horas_contratadas, horas_usadas')
     .eq('instituicao_id', instituicaoId)
     .eq('ativo', true)
-    .single()
+    .limit(1)
 
+  const pack = packs?.[0] ?? null
   const horasContratadas = pack?.horas_contratadas ?? 0
   const horasUsadas = pack?.horas_usadas ?? 0
   const horasDisponiveis = horasContratadas - horasUsadas
