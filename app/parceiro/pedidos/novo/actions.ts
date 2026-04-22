@@ -2,7 +2,7 @@
 import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 
-export async function criarPedidoParceiro(input: any) {
+export async function criarPedidoParceiroLivre(input: any) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Nao autenticado')
@@ -27,7 +27,7 @@ export async function criarPedidoParceiro(input: any) {
 
   const { error } = await supabase.from('pedidos').insert({
     codigo,
-    utente_id: input.utente_id,
+    utente_nome_livre: input.utente_nome,
     instituicao_id: input.instituicao_id,
     servico: input.tipo_servico,
     data_pedido: input.data_servico,
