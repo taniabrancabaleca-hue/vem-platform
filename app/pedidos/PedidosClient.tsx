@@ -46,9 +46,14 @@ export default function PedidosClient({ pedidos }: Props) {
           </thead>
           <tbody>
             {pedidos.length > 0 ? pedidos.map((p: any) => (
-              <tr key={p.id}>
+              <tr key={p.id} style={{ background: p.urgente ? '#fff7f7' : 'transparent' }}>
                 <td>
-                  <span onClick={() => router.push(`/pedidos/${p.id}`)} style={{ fontFamily: 'monospace', fontSize: 12, color: '#1B65B2', fontWeight: 500, cursor: 'pointer' }}>#{p.codigo}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span onClick={() => router.push(`/pedidos/${p.id}`)} style={{ fontFamily: 'monospace', fontSize: 12, color: '#1B65B2', fontWeight: 500, cursor: 'pointer' }}>#{p.codigo}</span>
+                    {p.urgente && (
+                      <span style={{ fontSize: 10, fontWeight: 600, background: '#fee2e2', color: '#991b1b', padding: '2px 6px', borderRadius: 20 }}>Urgente</span>
+                    )}
+                  </div>
                 </td>
                 <td style={{ fontWeight: 500, fontSize: 13 }}>{p.utente?.nome ?? p.utente_nome_livre ?? '—'}</td>
                 <td style={{ color: '#6b7280', fontSize: 13 }}>{p.instituicao?.nome ?? '—'}</td>
@@ -85,9 +90,14 @@ export default function PedidosClient({ pedidos }: Props) {
       {/* Mobile: cards */}
       <div className="mobile-only" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {pedidos.length > 0 ? pedidos.map((p: any) => (
-          <div key={p.id} style={{ background: 'white', borderRadius: 12, border: '1px solid #e5e7eb', padding: 16 }}>
+          <div key={p.id} style={{ background: 'white', borderRadius: 12, border: `1px solid ${p.urgente ? '#fca5a5' : '#e5e7eb'}`, padding: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <span onClick={() => router.push(`/pedidos/${p.id}`)} style={{ fontFamily: 'monospace', fontSize: 13, color: '#1B65B2', fontWeight: 600, cursor: 'pointer' }}>#{p.codigo}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span onClick={() => router.push(`/pedidos/${p.id}`)} style={{ fontFamily: 'monospace', fontSize: 13, color: '#1B65B2', fontWeight: 600, cursor: 'pointer' }}>#{p.codigo}</span>
+                {p.urgente && (
+                  <span style={{ fontSize: 10, fontWeight: 600, background: '#fee2e2', color: '#991b1b', padding: '2px 6px', borderRadius: 20 }}>Urgente</span>
+                )}
+              </div>
               <span className={`badge badge-${p.estado}`}>{ESTADO_LABEL[p.estado] ?? p.estado}</span>
             </div>
             <p style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 500, color: '#111827' }}>{p.utente?.nome ?? p.utente_nome_livre ?? '—'}</p>
