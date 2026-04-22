@@ -16,11 +16,24 @@ export default function LoginPage() {
     setLoading(true)
     setError('')
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    if (authError) {
       setError('Email ou palavra-passe incorretos.')
-    } else {
-      router.push('/dashboard')
+      setLoading(false)
+      return
+    }
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      const { data: perfil } = await supabase
+        .from('perfis')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+      if (perfil?.role === 'parceiro') {
+        router.push('/parceiro')
+      } else {
+        router.push('/dashboard')
+      }
     }
     setLoading(false)
   }
