@@ -1,6 +1,7 @@
 'use server'
 import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
+import { enviarEmailPedidoCriado } from '@/lib/emails'
 
 export async function criarPedidoParceiroLivre(input: any) {
   const supabase = createClient()
@@ -25,6 +26,12 @@ export async function criarPedidoParceiroLivre(input: any) {
   const { count } = await supabase.from('pedidos').select('*', { count: 'exact', head: true })
   const codigo = 'PED-' + String((count ?? 0) + 1).padStart(4, '0')
 
+  const { data: instituicao } = await supabase
+    .from('instituicoes')
+    .select('nome, email')
+    .eq('id', input.instituicao_id)
+    .single()
+
   const { error } = await supabase.from('pedidos').insert({
     codigo,
     utente_nome_livre: input.utente_nome,
@@ -40,5 +47,20 @@ export async function criarPedidoParceiroLivre(input: any) {
   })
 
   if (error) throw new Error(error.message)
+
+  if (instituicao?.email) {
+    try {
+      await enviarEmailPedidoCriado({
+        para: instituicao.email,
+        codigo,
+        servico: input.tipo_servico,
+        utente: input.utente_nome,
+        instituicao: instituicao.nome,
+        data: new Date(input.data_servico).toLocaleDateString('pt-PT'),
+        urgente: input.urgente ?? false,
+      })
+    } catch (e) { console.error(e) }
+  }
+
   revalidatePath('/parceiro')
 }
