@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { criarPedidoParceiro } from './actions'
+import { criarPedidoParceiroLivre } from './actions'
 
 const SERVICOS = [
   { value: 'consulta_externa', label: 'Consulta externa' },
@@ -12,16 +12,15 @@ const SERVICOS = [
 ]
 
 interface Props {
-  utentes: { id: string; nome: string; condicao?: string }[]
   instituicaoId: string
 }
 
-export default function NovoPedidoParceiroForm({ utentes, instituicaoId }: Props) {
+export default function NovoPedidoParceiroForm({ instituicaoId }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState('')
   const [form, setForm] = useState({
-    utente_id: '', tipo_servico: '', data_servico: '',
+    utente_nome: '', tipo_servico: '', data_servico: '',
     hora_servico: '09:00', origem: '', destino: '', urgente: false, notas: '',
   })
 
@@ -32,7 +31,7 @@ export default function NovoPedidoParceiroForm({ utentes, instituicaoId }: Props
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setErro('')
-    if (!form.utente_id || !form.tipo_servico || !form.data_servico) {
+    if (!form.utente_nome || !form.tipo_servico || !form.data_servico) {
       setErro('Preenche todos os campos obrigatórios.')
       return
     }
@@ -46,8 +45,8 @@ export default function NovoPedidoParceiroForm({ utentes, instituicaoId }: Props
     }
     setLoading(true)
     try {
-      await criarPedidoParceiro({
-        utente_id: form.utente_id,
+      await criarPedidoParceiroLivre({
+        utente_nome: form.utente_nome,
         instituicao_id: instituicaoId,
         tipo_servico: form.tipo_servico,
         data_servico: `${form.data_servico}T${form.hora_servico}:00`,
@@ -67,11 +66,9 @@ export default function NovoPedidoParceiroForm({ utentes, instituicaoId }: Props
     <div className="data-card" style={{ maxWidth: 600, padding: 32 }}>
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div>
-          <label className="form-label">Utente <span style={{ color: '#dc2626' }}>*</span></label>
-          <select className="form-input" value={form.utente_id} onChange={e => set('utente_id', e.target.value)} required>
-            <option value="">Selecionar utente…</option>
-            {utentes.map(u => <option key={u.id} value={u.id}>{u.nome}{u.condicao ? ` — ${u.condicao}` : ''}</option>)}
-          </select>
+          <label className="form-label">Nome do utente <span style={{ color: '#dc2626' }}>*</span></label>
+          <input type="text" className="form-input" placeholder="Ex: Maria Silva"
+            value={form.utente_nome} onChange={e => set('utente_nome', e.target.value)} required />
         </div>
 
         <div>
@@ -109,7 +106,7 @@ export default function NovoPedidoParceiroForm({ utentes, instituicaoId }: Props
 
         <div>
           <label className="form-label">Notas</label>
-          <textarea className="form-input" rows={3} placeholder="Instruções especiais…"
+          <textarea className="form-input" rows={3} placeholder="Instruções especiais, necessidades do utente…"
             value={form.notas} onChange={e => set('notas', e.target.value)}
             style={{ resize: 'vertical', fontFamily: 'inherit' }} />
         </div>
