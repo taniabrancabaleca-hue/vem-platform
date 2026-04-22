@@ -126,7 +126,7 @@ export default function PedidosParceiroList() {
               {/* Serviço */}
               <div style={{ flex: 1 }}>
                 <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Serviço</p>
-                <p style={{ fontSize: 13, color: "#374151", margin: 0, textTransform: "capitalize" }}>{p.servico || "—"}</p>
+                <p style={{ fontSize: 13, color: "#374151", margin: 0, textTransform: "capitalize" }}>{p.servico?.replace('_', ' ') || "—"}</p>
               </div>
 
               {/* Data */}
@@ -143,13 +143,17 @@ export default function PedidosParceiroList() {
                 <p style={{ fontSize: 13, color: "#374151", margin: 0 }}>{p.origem} → {p.destino}</p>
               </div>
 
-              {/* Botão */}
-              <button
-                onClick={() => router.push(`/parceiro/pedidos/${p.id}/editar`)}
-                style={{ fontSize: 12, fontWeight: 500, color: "#1B65B2", background: "#EBF2FA", border: "none", borderRadius: 8, padding: "6px 14px", cursor: "pointer", whiteSpace: "nowrap" }}
-              >
-                Editar
-              </button>
+              {/* Botão editar - só para pedidos pendentes */}
+              <div style={{ minWidth: 70, display: "flex", justifyContent: "flex-end" }}>
+                {p.estado === "pendente" && (
+                  <button
+                    onClick={() => router.push(`/parceiro/pedidos/${p.id}/editar`)}
+                    style={{ fontSize: 12, fontWeight: 500, color: "#1B65B2", background: "#EBF2FA", border: "none", borderRadius: 8, padding: "6px 14px", cursor: "pointer", whiteSpace: "nowrap" }}
+                  >
+                    Editar
+                  </button>
+                )}
+              </div>
 
             </div>
           ))}
