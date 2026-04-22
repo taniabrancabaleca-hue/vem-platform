@@ -30,22 +30,4 @@ export default function Sidebar() {
         {nav.map(({ href, label, icon: Icon }) => {
           const active = path === href || path.startsWith(href + '/')
           return (
-            <Link key={href} href={href} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 8, fontSize: 13, fontWeight: active ? 500 : 400, color: active ? 'white' : 'rgba(255,255,255,0.65)', background: active ? 'rgba(255,255,255,0.15)' : 'transparent', textDecoration: 'none', marginBottom: 2 }}>
-              <Icon size={16} />{label}
-            </Link>
-          )
-        })}
-      </nav>
-      <div style={{ padding: '12px 8px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-        <Link href="/definicoes" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 8, fontSize: 13, color: 'rgba(255,255,255,0.55)', textDecoration: 'none', marginBottom: 2 }}>
-          <Settings size={16} />Definições
-        </Link>
-        <form action={logout}>
-          <button type="submit" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 8, fontSize: 13, color: 'rgba(255,255,255,0.55)', background: 'none', border: 'none', cursor: 'pointer', width: '100%' }}>
-            <LogOut size={16} />Sair
-          </button>
-        </form>
-      </div>
-    </aside>
-  )
-}
+            <Link key={href} href={href} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 8, fontSize: 13, fontWeight: active ? 500 : 400, color: active ? 'w
