@@ -110,6 +110,10 @@ export default async function ParceiroPage() {
           + Novo pedido
         </a>
       </div>
+<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 600, color: '#374151', margin: 0 }}>Os meus pedidos</h2>
+        <a href="/parceiro/pedidos/novo" className="btn-primary" style={{ fontSize: 13, textDecoration: 'none', padding: '8px 16px' }}>+ Novo pedido</a>
+      </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {(pedidos ?? []).length > 0 ? (pedidos ?? []).map((p: any) => {
@@ -118,17 +122,37 @@ export default async function ParceiroPage() {
           return (
             <div key={p.id} style={{ background: 'white', borderRadius: 12, border: '1px solid #e5e7eb', padding: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                <div>
-                  <span style={{ fontFamily: 'monospace', fontSize: 13, color: '#1B65B2', fontWeight: 600 }}>#{p.codigo}</span>
-                  {p.urgente && <span style={{ marginLeft: 8, fontSize: 11, background: '#fee2e2', color: '#dc2626', padding: '2px 8px', borderRadius: 20, fontWeight: 600 }}>Urgente</span>}
-                </div>
-                <span style={{ fontSize: 12, fontWeight: 600, padding: '3px 12px', borderRadius: 20, background: cor.bg, color: cor.color, whiteSpace: 'nowrap' }}>
+                <span style={{ fontFamily: 'monospace', fontSize: 13, color: '#1B65B2', fontWeight: 600 }}>#{p.codigo}</span>
+                <span style={{ fontSize: 12, fontWeight: 600, padding: '3px 12px', borderRadius: 20, background: cor.bg, color: cor.color }}>
                   {ESTADO_LABEL[p.estado] ?? p.estado}
                 </span>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
                 <div>
-                  <p style={{ margin: '0 0 2px', fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Utente</p>
+                  <p style={{ margin: '0 0 2px', fontSize: 11, color: '#9ca3af', textTransform: 'uppercase' }}>Utente</p>
                   <p style={{ margin: 0, fontSize: 14, fontWeight: 500, color: '#111827' }}>{nomeUtente}</p>
                 </div>
                 <div>
+                  <p style={{ margin: '0 0 2px', fontSize: 11, color: '#9ca3af', textTransform: 'uppercase' }}>Serviço</p>
+                  <p style={{ margin: 0, fontSize: 13, color: '#374151' }}>{SERVICO_LABEL[p.servico] ?? p.servico ?? '—'}</p>
+                </div>
+                <div>
+                  <p style={{ margin: '0 0 2px', fontSize: 11, color: '#9ca3af', textTransform: 'uppercase' }}>Data</p>
+                  <p style={{ margin: 0, fontSize: 13, color: '#374151' }}>{p.data_pedido ? new Date(p.data_pedido).toLocaleDateString('pt-PT') : '—'}</p>
+                </div>
+              </div>
+              {p.estado === 'pendente' && (
+                <a href={`/parceiro/pedidos/${p.id}/editar`} style={{ fontSize: 12, color: '#1B65B2', textDecoration: 'none', padding: '6px 14px', borderRadius: 8, border: '1px solid #1B65B2', display: 'inline-block' }}>
+                  ✏️ Editar pedido
+                </a>
+              )}
+            </div>
+          )
+        }) : (
+          <div style={{ textAlign: 'center', color: '#9ca3af', padding: 48 }}>Nenhum pedido ainda</div>
+        )}
+      </div>
+    </div>
+  )
+}
+     
