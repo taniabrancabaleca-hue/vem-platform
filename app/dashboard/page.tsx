@@ -36,12 +36,12 @@ export default async function DashboardPage() {
 
   return (
     <div className="fade-in">
-      <div style={{ marginBottom: 32 }}>
+      <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#1B65B2', margin: 0 }}>Dashboard</h1>
         <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>Visão geral da plataforma VEM</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 32 }}>
+      <div className="kpi-grid" style={{ marginBottom: 24 }}>
         {kpis.map(k => (
           <div key={k.label} className="kpi-card">
             <p style={{ fontSize: 11, fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 8px' }}>{k.label}</p>
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+      <div className="dashboard-grid">
         <div style={{ background: 'white', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', padding: 24 }}>
           <p style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 16 }}>Acesso rápido</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
