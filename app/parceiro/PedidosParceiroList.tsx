@@ -6,20 +6,20 @@ import { createClient } from "@/lib/supabase";
 
 type Pedido = {
   id: string;
+  codigo: string;
   data_pedido: string;
-  data_transporte: string;
+  servico: string;
   estado: string;
   origem: string;
   destino: string;
-  nome_paciente?: string;
-  observacoes?: string;
+  utente_nome_livre?: string;
 };
 
 const ESTADO_CONFIG: Record<string, { label: string; bg: string; color: string }> = {
   pendente:   { label: "Pendente",   bg: "#fef9c3", color: "#854d0e" },
-  confirmado: { label: "Confirmado", bg: "#EBF2FA", color: "#1B65B2" },
+  atribuido:  { label: "Atribuído",  bg: "#dcfce7", color: "#15803d" },
   em_curso:   { label: "Em Curso",   bg: "#f3e8ff", color: "#7e22ce" },
-  concluido:  { label: "Concluído",  bg: "#dcfce7", color: "#15803d" },
+  concluido:  { label: "Concluído",  bg: "#EBF2FA", color: "#1B65B2" },
   cancelado:  { label: "Cancelado",  bg: "#fee2e2", color: "#991b1b" },
 };
 
@@ -51,8 +51,8 @@ export default function PedidosParceiroList() {
       }
       const { data, error } = await supabase
         .from("pedidos")
-        .select("id, data_pedido, data_transporte, estado, origem, destino, nome_paciente, observacoes")
-        .eq("parceiro_id", user.id)
+        .select("id, codigo, data_pedido, servico, estado, origem, destino, utente_nome_livre")
+        .eq("criado_por", user.id)
         .order("data_pedido", { ascending: false });
       if (error) {
         setErro("Erro ao carregar pedidos: " + error.message);
@@ -87,27 +87,27 @@ export default function PedidosParceiroList() {
       {pedidos.map((p) => (
         <div key={p.id} style={{ background: "white", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", padding: 20 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <span style={{ fontSize: 13, fontWeight: 600, color: "#1B65B2" }}>#{p.id.slice(0, 8).toUpperCase()}</span>
+            <span style={{ fontSize: 13, fontWeight: 600, color: "#1B65B2" }}>#{p.codigo}</span>
             <EstadoBadge estado={p.estado} />
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 24px", marginBottom: 12 }}>
-            {p.nome_paciente && (
+            {p.utente_nome_livre && (
               <div>
                 <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Utente</p>
-                <p style={{ fontSize: 13, fontWeight: 600, color: "#1a1a18", margin: 0 }}>{p.nome_paciente}</p>
+                <p style={{ fontSize: 13, fontWeight: 600, color: "#1a1a18", margin: 0 }}>{p.utente_nome_livre}</p>
               </div>
             )}
             <div>
+              <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Serviço</p>
+              <p style={{ fontSize: 13, fontWeight: 600, color: "#1a1a18", margin: 0 }}>{p.servico}</p>
+            </div>
+            <div>
               <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Data</p>
-              <p style={{ fontSize: 13, fontWeight: 600, color: "#1a1a18", margin: 0 }}>{new Date(p.data_transporte).toLocaleDateString("pt-PT")}</p>
+              <p style={{ fontSize: 13, color: "#374151", margin: 0 }}>{p.data_pedido ? new Date(p.data_pedido).toLocaleDateString("pt-PT") : "—"}</p>
             </div>
             <div>
-              <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Origem</p>
-              <p style={{ fontSize: 13, color: "#374151", margin: 0 }}>{p.origem}</p>
-            </div>
-            <div>
-              <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Destino</p>
-              <p style={{ fontSize: 13, color: "#374151", margin: 0 }}>{p.destino}</p>
+              <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Origem → Destino</p>
+              <p style={{ fontSize: 13, color: "#374151", margin: 0 }}>{p.origem} → {p.destino}</p>
             </div>
           </div>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
