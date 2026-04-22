@@ -17,13 +17,6 @@ export default async function NovoPedidoParceiroPage() {
 
   if (!perfil || perfil.role !== 'parceiro') redirect('/dashboard')
 
-  const { data: utentes } = await supabase
-    .from('utentes')
-    .select('id, nome, condicao')
-    .eq('instituicao_id', perfil.instituicao_id)
-    .eq('ativo', true)
-    .order('nome')
-
   return (
     <div className="fade-in">
       <div style={{ marginBottom: 32 }}>
@@ -33,10 +26,7 @@ export default async function NovoPedidoParceiroPage() {
         </h1>
         <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>Submeter um novo pedido de transporte</p>
       </div>
-      <NovoPedidoParceiroForm
-        utentes={utentes ?? []}
-        instituicaoId={perfil.instituicao_id}
-      />
+      <NovoPedidoParceiroForm instituicaoId={perfil.instituicao_id} />
     </div>
   )
 }
