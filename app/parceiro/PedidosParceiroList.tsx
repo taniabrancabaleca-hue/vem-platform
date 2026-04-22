@@ -54,14 +54,12 @@ export default function PedidosParceiroList() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { setErro("Utilizador não autenticado."); setLoading(false); return; }
 
-      // Buscar perfil para obter instituicao_id
       const { data: perfil } = await supabase
         .from("perfis")
         .select("instituicao_id")
         .eq("id", user.id)
         .single();
 
-      // Buscar pack de horas da instituição
       if (perfil?.instituicao_id) {
         const { data: packData } = await supabase
           .from("packs_horas")
@@ -72,7 +70,6 @@ export default function PedidosParceiroList() {
         if (packData) setPack(packData);
       }
 
-      // Buscar pedidos
       const { data, error } = await supabase
         .from("pedidos")
         .select("id, codigo, data_pedido, servico, estado, origem, destino, utente_nome_livre, urgente")
@@ -114,14 +111,18 @@ export default function PedidosParceiroList() {
       {/* Pack de horas */}
       {pack && (
         <div style={{ background: "white", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", padding: "20px 24px", marginBottom: 24 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
             <p style={{ fontSize: 13, fontWeight: 600, color: "#374151", margin: 0 }}>Utilização do pack</p>
-            <p style={{ fontSize: 13, color: "#6b7280", margin: 0 }}>
-              <span style={{ fontWeight: 600, color: "#1a1a18" }}>{pack.horas_usadas}h</span> / {pack.horas_contratadas}h
-              <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 600, background: horasRestantes <= 5 ? "#fee2e2" : "#dcfce7", color: horasRestantes <= 5 ? "#991b1b" : "#15803d", padding: "2px 8px", borderRadius: 20 }}>
-                {horasRestantes}h restantes
-              </span>
-            </p>
+            <div style={{ textAlign: "right" }}>
+              <p style={{ fontSize: 13, color: "#6b7280", margin: "0 0 4px" }}>
+                <span style={{ fontWeight: 600, color: "#1a1a18" }}>{pack.horas_usadas}h usadas</span> de {pack.horas_contratadas}h contratadas
+              </p>
+              <p style={{ margin: 0 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, background: horasRestantes <= 5 ? "#fee2e2" : "#dcfce7", color: horasRestantes <= 5 ? "#991b1b" : "#15803d", padding: "3px 10px", borderRadius: 20 }}>
+                  {horasRestantes}h disponíveis
+                </span>
+              </p>
+            </div>
           </div>
           <div style={{ background: "#f3f4f6", borderRadius: 99, height: 8, overflow: "hidden" }}>
             <div style={{ width: `${percentagem}%`, height: "100%", background: corBarra, borderRadius: 99, transition: "width 0.5s ease" }} />
