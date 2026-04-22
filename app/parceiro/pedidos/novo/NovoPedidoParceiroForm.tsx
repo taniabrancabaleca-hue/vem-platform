@@ -3,14 +3,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { criarPedidoParceiroLivre } from './actions'
 
-const SERVICOS = [
-  { value: 'consulta_externa', label: 'Consulta externa' },
-  { value: 'transporte_consulta', label: 'Transporte para consulta' },
-  { value: 'passeio', label: 'Passeio' },
-  { value: 'recolha_pos_alta', label: 'Recolha pós-alta' },
-  { value: 'acompanhamento_exame', label: 'Acompanhamento a exame' },
-]
-
 interface Props {
   instituicaoId: string
 }
@@ -73,10 +65,8 @@ export default function NovoPedidoParceiroForm({ instituicaoId }: Props) {
 
         <div>
           <label className="form-label">Tipo de serviço <span style={{ color: '#dc2626' }}>*</span></label>
-          <select className="form-input" value={form.tipo_servico} onChange={e => set('tipo_servico', e.target.value)} required>
-            <option value="">Selecionar serviço…</option>
-            {SERVICOS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-          </select>
+          <input type="text" className="form-input" placeholder="Ex: Consulta externa, Passeio, Transporte…"
+            value={form.tipo_servico} onChange={e => set('tipo_servico', e.target.value)} required />
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
