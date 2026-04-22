@@ -24,22 +24,23 @@ interface Props {
   instituicoes: { id: string; nome: string }[]
 }
 
-export default function PedidosClient({ pedidos, utentes, instituicoes }: Props) {
+export default function PedidosClient({ pedidos }: Props) {
   const router = useRouter()
 
   return (
     <div className="fade-in">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
         <div>
           <h1 style={{ fontFamily: 'Fraunces, serif', fontSize: 28, fontWeight: 400, color: '#1B65B2', margin: 0 }}>Pedidos</h1>
           <p style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{pedidos.length} pedidos registados</p>
         </div>
-        <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => router.push('/pedidos/novo')}>
+        <button className="btn-primary" onClick={() => router.push('/pedidos/novo')}>
           + Novo pedido
         </button>
       </div>
 
-      <div className="data-card">
+      {/* Desktop: tabela */}
+      <div className="data-card desktop-only">
         <table className="vem-table">
           <thead>
             <tr>
@@ -49,16 +50,13 @@ export default function PedidosClient({ pedidos, utentes, instituicoes }: Props)
           </thead>
           <tbody>
             {pedidos.length > 0 ? pedidos.map((p: any) => (
-              <tr key={p.id}>
-                <td>
-                  <span style={{ fontFamily: 'monospace', fontSize: 12, color: '#1B65B2', fontWeight: 500 }}>#{p.codigo}</span>
-                  {p.urgente && <span className="badge badge-urgente" style={{ marginLeft: 6, fontSize: 10 }}>Urgente</span>}
-                </td>
+              <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => router.push(`/pedidos/${p.id}`)}>
+                <td><span style={{ fontFamily: 'monospace', fontSize: 12, color: '#1B65B2', fontWeight: 500 }}>#{p.codigo}</span></td>
                 <td style={{ fontWeight: 500, fontSize: 13 }}>{p.utente?.nome ?? '—'}</td>
                 <td style={{ color: '#6b7280', fontSize: 13 }}>{p.instituicao?.nome ?? '—'}</td>
-                <td style={{ color: '#6b7280', fontSize: 13 }}>{SERVICO_LABEL[p.tipo_servico] ?? p.tipo_servico}</td>
+                <td style={{ color: '#6b7280', fontSize: 13 }}>{SERVICO_LABEL[p.servico] ?? p.servico ?? '—'}</td>
                 <td style={{ color: '#6b7280', fontSize: 12 }}>
-                  {p.data_servico ? new Date(p.data_servico).toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'}
+                  {p.data_pedido ? new Date(p.data_pedido).toLocaleDateString('pt-PT') : '—'}
                 </td>
                 <td style={{ color: '#6b7280', fontSize: 13 }}>{p.guia?.nome ?? '—'}</td>
                 <td><span className={`badge badge-${p.estado}`}>{ESTADO_LABEL[p.estado] ?? p.estado}</span></td>
@@ -68,6 +66,27 @@ export default function PedidosClient({ pedidos, utentes, instituicoes }: Props)
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile: cards */}
+      <div className="mobile-only" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {pedidos.length > 0 ? pedidos.map((p: any) => (
+          <div key={p.id} onClick={() => router.push(`/pedidos/${p.id}`)}
+            style={{ background: 'white', borderRadius: 12, border: '1px solid #e5e7eb', padding: 16, cursor: 'pointer' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ fontFamily: 'monospace', fontSize: 13, color: '#1B65B2', fontWeight: 600 }}>#{p.codigo}</span>
+              <span className={`badge badge-${p.estado}`}>{ESTADO_LABEL[p.estado] ?? p.estado}</span>
+            </div>
+            <p style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 500, color: '#111827' }}>{p.utente?.nome ?? '—'}</p>
+            <p style={{ margin: '0 0 4px', fontSize: 12, color: '#6b7280' }}>{p.instituicao?.nome ?? '—'}</p>
+            <p style={{ margin: 0, fontSize: 12, color: '#9ca3af' }}>
+              {SERVICO_LABEL[p.servico] ?? p.servico ?? '—'}
+              {p.data_pedido ? ` · ${new Date(p.data_pedido).toLocaleDateString('pt-PT')}` : ''}
+            </p>
+          </div>
+        )) : (
+          <div style={{ textAlign: 'center', color: '#9ca3af', padding: 48 }}>Nenhum pedido ainda</div>
+        )}
       </div>
     </div>
   )
