@@ -94,4 +94,129 @@ export default function PedidosParceiroList() {
     <div className="fade-in">
 
       {/* Header */}
-      <div style
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+        <div>
+          <h1 style={{ fontFamily: "Fraunces, serif", fontSize: 28, fontWeight: 400, color: "#1B65B2", margin: 0 }}>
+            Os meus pedidos
+          </h1>
+          <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4, marginBottom: 0 }}>
+            Gestão dos seus pedidos de transporte
+          </p>
+        </div>
+        <button
+          onClick={() => router.push("/parceiro/pedidos/novo")}
+          style={{ background: "#1B65B2", color: "white", border: "none", borderRadius: 8, padding: "10px 18px", fontSize: 13, fontWeight: 500, cursor: "pointer", whiteSpace: "nowrap" }}
+        >
+          + Novo pedido
+        </button>
+      </div>
+
+      {/* Pack de horas */}
+      {pack && (
+        <div style={{ background: "white", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", padding: "20px 24px", marginBottom: 24 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: "#374151", margin: 0 }}>Utilização do pack</p>
+            <p style={{ fontSize: 13, color: "#6b7280", margin: 0 }}>
+              <span style={{ fontWeight: 600, color: "#1a1a18" }}>{pack.horas_usadas}h</span> / {pack.horas_contratadas}h
+              <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 600, background: horasRestantes <= 5 ? "#fee2e2" : "#dcfce7", color: horasRestantes <= 5 ? "#991b1b" : "#15803d", padding: "2px 8px", borderRadius: 20 }}>
+                {horasRestantes}h restantes
+              </span>
+            </p>
+          </div>
+          <div style={{ background: "#f3f4f6", borderRadius: 99, height: 8, overflow: "hidden" }}>
+            <div style={{ width: `${percentagem}%`, height: "100%", background: corBarra, borderRadius: 99, transition: "width 0.5s ease" }} />
+          </div>
+        </div>
+      )}
+
+      {/* Loading */}
+      {loading && (
+        <div style={{ display: "flex", justifyContent: "center", padding: "48px 0" }}>
+          <div style={{ width: 32, height: 32, borderRadius: "50%", border: "3px solid #EBF2FA", borderTopColor: "#1B65B2", animation: "spin 0.8s linear infinite" }} />
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+
+      {/* Erro */}
+      {!loading && erro && (
+        <div style={{ background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 8, padding: 16, color: "#991b1b", fontSize: 13 }}>{erro}</div>
+      )}
+
+      {/* Vazio */}
+      {!loading && !erro && pedidos.length === 0 && (
+        <div style={{ background: "white", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", padding: "48px 24px", textAlign: "center" }}>
+          <p style={{ fontSize: 15, fontWeight: 500, color: "#374151", margin: "0 0 8px" }}>Sem pedidos registados</p>
+          <p style={{ fontSize: 13, color: "#9ca3af", margin: "0 0 20px" }}>Crie o seu primeiro pedido de transporte.</p>
+          <button
+            onClick={() => router.push("/parceiro/pedidos/novo")}
+            style={{ background: "#1B65B2", color: "white", border: "none", borderRadius: 8, padding: "10px 20px", fontSize: 13, fontWeight: 500, cursor: "pointer" }}
+          >
+            + Novo pedido
+          </button>
+        </div>
+      )}
+
+      {/* Lista */}
+      {!loading && !erro && pedidos.length > 0 && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {pedidos.map((p) => (
+            <div key={p.id} style={{ background: "white", borderRadius: 12, border: `1px solid ${p.urgente ? "#fca5a5" : "rgba(0,0,0,0.06)"}`, padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+
+              {/* Código + badges */}
+              <div style={{ minWidth: 100 }}>
+                <p style={{ fontSize: 13, fontWeight: 700, color: "#1B65B2", margin: "0 0 4px" }}>#{p.codigo}</p>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  <EstadoBadge estado={p.estado} />
+                  {p.urgente && (
+                    <span style={{ fontSize: 11, fontWeight: 600, background: "#fee2e2", color: "#991b1b", padding: "3px 10px", borderRadius: 20 }}>
+                      Urgente
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Utente */}
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Utente</p>
+                <p style={{ fontSize: 13, fontWeight: 600, color: "#1a1a18", margin: 0 }}>{p.utente_nome_livre || "—"}</p>
+              </div>
+
+              {/* Serviço */}
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Serviço</p>
+                <p style={{ fontSize: 13, color: "#374151", margin: 0, textTransform: "capitalize" }}>{p.servico?.replace('_', ' ') || "—"}</p>
+              </div>
+
+              {/* Data */}
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Data</p>
+                <p style={{ fontSize: 13, color: "#374151", margin: 0 }}>
+                  {p.data_pedido ? new Date(p.data_pedido).toLocaleDateString("pt-PT") : "—"}
+                </p>
+              </div>
+
+              {/* Rota */}
+              <div style={{ flex: 2 }}>
+                <p style={{ fontSize: 10, fontWeight: 500, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 2px" }}>Rota</p>
+                <p style={{ fontSize: 13, color: "#374151", margin: 0 }}>{p.origem} → {p.destino}</p>
+              </div>
+
+              {/* Botão editar - só para pedidos pendentes */}
+              <div style={{ minWidth: 70, display: "flex", justifyContent: "flex-end" }}>
+                {p.estado === "pendente" && (
+                  <button
+                    onClick={() => router.push(`/parceiro/pedidos/${p.id}/editar`)}
+                    style={{ fontSize: 12, fontWeight: 500, color: "#1B65B2", background: "#EBF2FA", border: "none", borderRadius: 8, padding: "6px 14px", cursor: "pointer", whiteSpace: "nowrap" }}
+                  >
+                    Editar
+                  </button>
+                )}
+              </div>
+
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
